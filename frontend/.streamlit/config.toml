@@ -1,0 +1,19 @@
+[theme]
+primaryColor = "#FF6B6B"
+backgroundColor = "#F8F9FA"
+secondaryBackgroundColor = "#E8EAED"
+textColor = "#262730"
+font = "sans serif"
+
+[logger]
+level = "info"
+messageFormat = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+
+[client]
+toolbarMode = "minimal"
+showSidebarNavigation = false
+
+[server]
+port = 8501
+headless = true
+runOnSave = true

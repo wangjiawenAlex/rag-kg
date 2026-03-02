@@ -1,0 +1,5 @@
+{"query_id": "q-001", "query": "What is dynamic routing?", "expected_strategy": "KG_THEN_VECTOR", "expected_evidence_count": 1, "expected_top_docs": ["doc-0001::chunk-0"]}
+{"query_id": "q-002", "query": "How do knowledge graphs work in information retrieval?", "expected_strategy": "KG_ONLY", "expected_evidence_count": 2, "expected_top_docs": ["doc-0002::chunk-0", "doc-0002::chunk-1"]}
+{"query_id": "q-003", "query": "Explain the difference between vector search and knowledge graph traversal", "expected_strategy": "HYBRID_JOIN", "expected_evidence_count": 2, "expected_top_docs": ["doc-0001::chunk-0", "doc-0003::chunk-0"]}
+{"query_id": "q-004", "query": "What databases are used in RAG systems?", "expected_strategy": "VECTOR_ONLY", "expected_evidence_count": 1, "expected_top_docs": ["doc-0003::chunk-0"]}
+{"query_id": "q-005", "query": "How should multi-user sessions be managed in production?", "expected_strategy": "VECTOR_ONLY", "expected_evidence_count": 1, "expected_top_docs": ["doc-0004::chunk-0"]}

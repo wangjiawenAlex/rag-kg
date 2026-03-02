@@ -1,0 +1,299 @@
+openapi: 3.0.0
+info:
+  title: RAG Dynamic Router API
+  version: 1.0.0
+  description: API for multi-user RAG system with dynamic query routing
+
+servers:
+  - url: http://localhost:8000/api/v1
+    description: Development server
+  - url: https://api.example.com/api/v1
+    description: Production server
+
+paths:
+  /auth/login:
+    post:
+      summary: User login
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+        '401':
+          description: Invalid credentials
+        '400':
+          description: Bad request
+
+  /auth/refresh:
+    post:
+      summary: Refresh access token
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefreshTokenRequest'
+      responses:
+        '200':
+          description: Token refreshed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+        '401':
+          description: Invalid refresh token
+
+  /query:
+    post:
+      summary: Submit a query
+      tags:
+        - Query
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QueryRequest'
+      responses:
+        '200':
+          description: Query processed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueryResponse'
+        '401':
+          description: Unauthorized
+        '422':
+          description: Validation error
+
+  /ingest/documents:
+    post:
+      summary: Ingest documents
+      tags:
+        - Data Ingestion
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IngestDocumentsRequest'
+      responses:
+        '200':
+          description: Documents ingested
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IngestDocumentsResponse'
+
+  /ingest/triples:
+    post:
+      summary: Ingest knowledge graph triples
+      tags:
+        - Data Ingestion
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IngestTriplesRequest'
+      responses:
+        '200':
+          description: Triples ingested
+
+  /admin/metrics/query-distribution:
+    get:
+      summary: Get query distribution metrics
+      tags:
+        - Admin
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: start_time
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: end_time
+          in: query
+          schema:
+            type: string
+            format: date-time
+      responses:
+        '200':
+          description: Metrics returned
+        '401':
+          description: Unauthorized
+
+  /health:
+    get:
+      summary: System health check
+      tags:
+        - System
+      responses:
+        '200':
+          description: System is healthy
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    LoginRequest:
+      type: object
+      required:
+        - username
+        - password
+      properties:
+        username:
+          type: string
+          example: user@example.com
+        password:
+          type: string
+          format: password
+          example: password123
+
+    TokenResponse:
+      type: object
+      properties:
+        access_token:
+          type: string
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+        refresh_token:
+          type: string
+        token_type:
+          type: string
+          example: bearer
+        expires_in:
+          type: integer
+          example: 3600
+
+    QueryRequest:
+      type: object
+      required:
+        - query
+      properties:
+        query:
+          type: string
+          example: What is dynamic routing?
+        session_id:
+          type: string
+          nullable: true
+        top_k:
+          type: integer
+          default: 5
+          minimum: 1
+          maximum: 100
+        use_reader:
+          type: boolean
+          default: true
+        router_hint:
+          type: string
+          nullable: true
+          enum: ["VECTOR_ONLY", "KG_ONLY", "KG_THEN_VECTOR", "HYBRID_JOIN"]
+
+    QueryResponse:
+      type: object
+      properties:
+        answer:
+          type: string
+        evidence:
+          type: array
+          items:
+            $ref: '#/components/schemas/Evidence'
+        router_decision:
+          $ref: '#/components/schemas/RouterDecision'
+        latency_ms:
+          type: integer
+        sources:
+          type: array
+          items:
+            type: object
+
+    Evidence:
+      type: object
+      properties:
+        id:
+          type: string
+        source:
+          type: string
+          enum: ["vector", "kg"]
+        text:
+          type: string
+        score:
+          type: number
+          format: float
+        metadata:
+          type: object
+          nullable: true
+
+    RouterDecision:
+      type: object
+      properties:
+        strategy:
+          type: string
+          enum: ["VECTOR_ONLY", "KG_ONLY", "KG_THEN_VECTOR", "HYBRID_JOIN"]
+        reason:
+          type: string
+        confidence:
+          type: number
+          format: float
+
+    IngestDocumentsRequest:
+      type: object
+      properties:
+        documents:
+          type: array
+          items:
+            type: object
+        chunk_size:
+          type: integer
+          default: 512
+        chunk_overlap:
+          type: integer
+          default: 50
+
+    IngestDocumentsResponse:
+      type: object
+      properties:
+        total_documents:
+          type: integer
+        total_chunks:
+          type: integer
+        successful:
+          type: integer
+        failed:
+          type: integer
+        errors:
+          type: array
+          items:
+            type: object
+          nullable: true
+
+    IngestTriplesRequest:
+      type: object
+      properties:
+        triples:
+          type: array
+          items:
+            type: object

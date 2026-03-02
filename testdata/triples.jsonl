@@ -1,0 +1,8 @@
+{"id": "t-0001", "subject": "dynamic routing", "predicate": "uses", "object": "vector search", "confidence": 0.85, "provenance": {"doc_id": "doc-0001", "offset": 120}}
+{"id": "t-0002", "subject": "dynamic routing", "predicate": "uses", "object": "knowledge graph", "confidence": 0.90, "provenance": {"doc_id": "doc-0001", "offset": 150}}
+{"id": "t-0003", "subject": "knowledge graph", "predicate": "contains", "object": "entity", "confidence": 0.95, "provenance": {"doc_id": "doc-0002", "offset": 45}}
+{"id": "t-0004", "subject": "knowledge graph", "predicate": "represents", "object": "relationship", "confidence": 0.92, "provenance": {"doc_id": "doc-0002", "offset": 78}}
+{"id": "t-0005", "subject": "vector database", "predicate": "enables", "object": "semantic search", "confidence": 0.88, "provenance": {"doc_id": "doc-0003", "offset": 30}}
+{"id": "t-0006", "subject": "RAG system", "predicate": "combines", "object": "retrieval", "confidence": 0.93, "provenance": {"doc_id": "doc-0001", "offset": 200}}
+{"id": "t-0007", "subject": "RAG system", "predicate": "combines", "object": "generation", "confidence": 0.93, "provenance": {"doc_id": "doc-0001", "offset": 200}}
+{"id": "t-0008", "subject": "session management", "predicate": "requires", "object": "authentication", "confidence": 0.91, "provenance": {"doc_id": "doc-0004", "offset": 80}}
