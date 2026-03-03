@@ -7,6 +7,8 @@ Handles document chunking, embedding generation, and data loading.
 from typing import List, Dict, Optional, Tuple
 from dataclasses import dataclass
 
+from app.services.kg_service import Triple
+
 
 @dataclass
 class Document:
@@ -81,7 +83,7 @@ class IngestService:
                         text=chunk_text,
                         chunk_index=i,
                         metadata={
-                            **doc.metadata or {},
+                            **(doc.metadata or {}),
                             "source": doc.source,
                             "title": doc.title
                         }
