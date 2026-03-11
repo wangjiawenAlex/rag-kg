@@ -13,21 +13,21 @@ y:\wjw\
 ├── backend/                           # FastAPI 后端应用
 │   ├── app/
 │   │   ├── __init__.py
-│   │   ├── main.py                    # ✅ FastAPI 应用工厂 - 完全实现
+│   │   ├── main.py                    # ✅ FastAPI 应用
 │   │   ├── api/
 │   │   │   ├── __init__.py
 │   │   │   ├── v1/
 │   │   │   │   ├── __init__.py
-│   │   │   │   ├── auth.py           # ✅ JWT 认证端点 - 完全实现
-│   │   │   │   ├── query.py          # ✅ 查询端点 - 完全实现
-│   │   │   │   ├── ingest.py         # ✅ 文档摄入端点 - 完全实现
-│   │   │   │   └── admin.py          # ✅ 管理操作端点 - 完全实现
+│   │   │   │   ├── auth.py           # ✅ JWT 认证端点
+│   │   │   │   ├── query.py          # ✅ 查询端点
+│   │   │   │   ├── ingest.py         # ✅ 文档摄入端点
+│   │   │   │   └── admin.py          # ✅ 管理操作端点现
 │   │   ├── core/
 │   │   │   ├── __init__.py
-│   │   │   ├── config.py             # ✅ Pydantic 设置 - 完全实现
-│   │   │   ├── security.py           # ✅ JWT 和密码工具 - 完全实现
-│   │   │   ├── logging_setup.py      # ✅ 日志配置 - 完全实现
-│   │   │   └── postgres.py           # PostgreSQL 数据库模式
+│   │   │   ├── config.py             # ✅ Pydantic 设置
+│   │   │   ├── security.py           # ✅ JWT 和密码工具
+│   │   │   ├── logging_setup.py      # ✅ 日志配置
+│   │   │   └── postgres.py           # PostgreSQL
 │   │   ├── models/
 │   │   │   ├── __init__.py
 │   │   │   ├── schemas.py            # Pydantic 数据结构
@@ -35,16 +35,16 @@ y:\wjw\
 │   │   │   └── response_models.py    # 响应模型
 │   │   ├── services/
 │   │   │   ├── __init__.py
-│   │   │   ├── router_service.py     # ✅ 动态路由逻辑 - 完全实现
-│   │   │   ├── vector_service.py     # ✅ 向量搜索（模拟） - 完全实现
-│   │   │   ├── kg_service.py         # ✅ 知识图谱操作（模拟） - 完全实现
-│   │   │   ├── reader_service.py     # ✅ 答案生成与重排 - 完全实现
-│   │   │   └── ingest_service.py     # ✅ 文档摄入逻辑 - 完全实现
+│   │   │   ├── router_service.py     # ✅ 动态路由逻辑
+│   │   │   ├── vector_service.py     # ✅ 向量搜索
+│   │   │   ├── kg_service.py         # ✅ 知识图谱操作
+│   │   │   ├── reader_service.py     # ✅ 答案生成与重排
+│   │   │   └── ingest_service.py     # ✅ 文档摄入逻辑
 │   │   ├── db/
 │   │   │   ├── __init__.py
-│   │   │   ├── postgres.py           # PostgreSQL 客户端（模拟）
-│   │   │   ├── vector_client.py      # 向量DB包装器（模拟）
-│   │   │   └── neo4j_client.py       # Neo4j 客户端（模拟）
+│   │   │   ├── postgres.py           # PostgreSQL 客户端
+│   │   │   ├── vector_client.py      # 向量DB包装器
+│   │   │   └── neo4j_client.py       # Neo4j 客户端
 │   │   └── tests/
 │   │       ├── __init__.py
 │   │       ├── fixtures.py           # 分享的测试夹具
@@ -57,10 +57,10 @@ y:\wjw\
 ├── frontend/                          # Streamlit 前端应用
 │   ├── streamlit_app/
 │   │   ├── __init__.py
-│   │   ├── app.py                    # ✅ 主应用与页面路由 - 完全实现
-│   │   ├── auth.py                   # ✅ 认证UI - 完全实现
-│   │   ├── query_ui.py               # ✅ 查询界面 - 完全实现
-│   │   ├── utils.py                  # ✅ 工具函数与API处理 - 完全实现
+│   │   ├── app.py                    # ✅ 主应用与页面路由
+│   │   ├── auth.py                   # ✅ 认证UI
+│   │   ├── query_ui.py               # ✅ 查询界面
+│   │   ├── utils.py                  # ✅ 工具函数与API处理
 │   │   └── pages/
 │   │       ├── 01_Query.py           # 查询页面
 │   │       ├── 02_History.py         # 历史记录页面
@@ -72,8 +72,8 @@ y:\wjw\
 │   ├── .streamlit/
 │   │   └── config.toml               # Streamlit 配置
 │   └── Dockerfile                    # Docker 镜像
-├── docker-compose.yml                # ✅ Docker Compose 开发配置 - 完全实现
-├── kubernetes/                       # ✅ Kubernetes 生产配置 - 完全实现
+├── docker-compose.yml                # ✅ Docker Compose 开发配置
+├── kubernetes/                       # ✅ Kubernetes 生产配置
 │   ├── deployment.yaml               # 后端部署
 │   ├── service.yaml                  # 服务暴露
 │   ├── configmap.yaml                # 配置映射
