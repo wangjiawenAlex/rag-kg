@@ -14,7 +14,7 @@
 | **前端应用** | ✅ 100% | 所有页面和功能已实现 |
 | **认证系统** | ✅ 100% | JWT + bcrypt 完全实现 |
 | **API 端点** | ✅ 100% | 12个端点，所有功能完整 |
-| **数据库** | ✅ 100% | PostgreSQL、Neo4j、向量DB 支持 |
+| **数据库** | ✅ 100% | SQLite、Neo4j、ChromaDB 支持 |
 | **部署配置** | ✅ 100% | Docker、Docker Compose、Kubernetes |
 | **文档** | ✅ 100% | 4份详细文档 + API 文档 |
 | **测试** | ✅ 100% | 测试框架 + 系统验证脚本 |
@@ -182,7 +182,7 @@ docker-compose up --build
         ┌─────────────┼─────────────┐
         │             │             │
         ▼             ▼             ▼
-    PostgreSQL    Neo4j      Milvus/Chroma
+      SQLite      Neo4j       ChromaDB
    (Relations)   (Graph)     (Vectors)
 ```
 
@@ -255,7 +255,7 @@ http://localhost:8000/docs
 
 ## 💾 数据库支持
 
-### PostgreSQL 15
+### SQLite（默认本地）
 ```sql
 ✅ 文档存储 (documents 表)
 ✅ 文本块 (chunks 表)
@@ -270,7 +270,7 @@ http://localhost:8000/docs
 ✅ 属性和元数据
 ```
 
-### 向量数据库 (Milvus/Chroma)
+### 向量数据库 (ChromaDB)
 ```
 ✅ 向量存储和索引
 ✅ 相似度搜索
@@ -358,7 +358,7 @@ streamlit run streamlit_app/app.py
 - NER 实体提取（简单启发式方法）
 
 ### ℹ️ 下一步可以集成
-- 真实的 PostgreSQL 连接
+- 真实的 SQLite（异步）连接
 - 真实的 embedding 模型
 - 真实的大语言模型（LLM）
 - Redis 缓存层

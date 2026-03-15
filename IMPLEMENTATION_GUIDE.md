@@ -338,7 +338,7 @@ pytest app/tests/test_services.py::TestRouterService::test_vector_only -v
 
 ## ⚡ 性能最优化
 
-1. **向量数据库索引**: 确保 Milvus/Chroma 已优化索引
+1. **向量数据库索引**: 确保 ChromaDB 已完成本地持久化与检索参数优化
 2. **连接池**: 默认配置已优化，可在生产环境调整
 3. **缓存**: 可集成 Redis 缓存热点查询
 4. **异步处理**: 系统全异步设计，支持高并发

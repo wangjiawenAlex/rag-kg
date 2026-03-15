@@ -280,7 +280,7 @@ streamlit run streamlit_app/app.py
 
 - ✅ **完整后端** - FastAPI 应用，包括所有服务
 - ✅ **完整前端** - Streamlit 应用，包括所有页面
-- ✅ **数据库模式** - PostgreSQL 和 Neo4j 定义
+- ✅ **数据库模式** - SQLite 和 Neo4j 定义（向量库为 ChromaDB）
 - ✅ **Docker 容器化** - 开发和生产配置
 - ✅ **API 文档** - 完整的 API 规范
 - ✅ **测试用例** - 系统验证脚本
@@ -314,7 +314,7 @@ streamlit run streamlit_app/app.py
 - [ ] 导入自己的文档数据
 - [ ] 自定义路由策略
 - [ ] 集成真实的 LLM 模型
-- [ ] 选择 PostgreSQL 和 Neo4j 进行部署
+- [ ] 选择 SQLite + Neo4j（本地）或按需扩展到生产数据库
 - [ ] 配置生产监控
 
 ---
