@@ -27,7 +27,7 @@ y:\wjw\
 │   │   │   ├── config.py             # ✅ Pydantic 设置 - 完全实现
 │   │   │   ├── security.py           # ✅ JWT 和密码工具 - 完全实现
 │   │   │   ├── logging_setup.py      # ✅ 日志配置 - 完全实现
-│   │   │   └── postgres.py           # PostgreSQL 数据库模式
+│   │   │   └── postgres.py           # SQLite 优先关系数据库模型
 │   │   ├── models/
 │   │   │   ├── __init__.py
 │   │   │   ├── schemas.py            # Pydantic 数据结构
@@ -42,7 +42,7 @@ y:\wjw\
 │   │   │   └── ingest_service.py     # ✅ 文档摄入逻辑 - 完全实现
 │   │   ├── db/
 │   │   │   ├── __init__.py
-│   │   │   ├── postgres.py           # PostgreSQL 客户端（模拟）
+│   │   │   ├── postgres.py           # SQLite 优先关系数据库客户端
 │   │   │   ├── vector_client.py      # 向量DB包装器（模拟）
 │   │   │   └── neo4j_client.py       # Neo4j 客户端（模拟）
 │   │   └── tests/
@@ -77,7 +77,7 @@ y:\wjw\
 │   ├── deployment.yaml               # 后端部署
 │   ├── service.yaml                  # 服务暴露
 │   ├── configmap.yaml                # 配置映射
-│   └── postgres-statefulset.yaml     # PostgreSQL 有状态集
+│   └── neo4j-statefulset.yaml        # Neo4j 有状态集
 ├── mvp.md                            # 原始 MVP 规范
 └── README.md                         # 本文件
 ```
@@ -86,9 +86,9 @@ y:\wjw\
 
 ### Backend
 - **Framework**: FastAPI (Python)
-- **Async**: AsyncIO, asyncpg
-- **Databases**: PostgreSQL, Neo4j (Knowledge Graph), Milvus/Chroma (Vector DB)
-- **NLP**: sentence-transformers, spaCy (NER)
+- **Async**: AsyncIO, aiosqlite
+- **Databases**: SQLite (local relational), Neo4j (Knowledge Graph), ChromaDB (Vector DB)
+- **LLM/Embedding**: Online API-first (DeepSeek/OpenAI-compatible), no local GPU dependency
 - **Authentication**: JWT, bcrypt
 - **Testing**: pytest, pytest-asyncio
 
@@ -101,8 +101,8 @@ y:\wjw\
 
 ### 后端
 - **框架**: FastAPI 0.104.1 (异步Python)
-- **数据库**: PostgreSQL 15 (关系)、Neo4j 5 (知识图谱)、Milvus/Chroma (向量)
-- **NLP**: sentence-transformers、spaCy (NER)
+- **数据库**: SQLite (关系)、Neo4j 5 (知识图谱)、ChromaDB (向量)
+- **LLM/Embedding**: 在线 API 优先（DeepSeek/OpenAI 兼容），无需本地 GPU
 - **认证**: JWT (PyJWT)、bcrypt
 - **异步**: 全内置 AsyncIO 支持
 - **部署**: Docker、Kubernetes
@@ -118,6 +118,8 @@ y:\wjw\
 - **日志**: 文件轮转和控制台输出
 
 ## 🚀 快速开始
+
+> 轻量本地模式说明：默认使用 **SQLite + ChromaDB + 本地 Neo4j + 在线 LLM/Embedding API**，适合无 GPU 的轻薄本环境。
 
 ### 方式1: 使用Docker Compose (推荐)
 
@@ -263,7 +265,7 @@ streamlit run streamlit_app/app.py
 
 ## 💾 数据库架构
 
-### PostgreSQL 表
+### SQLite 表（默认本地）
 
 ```sql
 -- 文档存储
@@ -282,7 +284,7 @@ CREATE TABLE chunks (
     document_id UUID REFERENCES documents(id),
     chunk_text TEXT,
     chunk_index INT,
-    embedding VECTOR(384)  -- 向量维度
+    embedding BLOB/TEXT      -- 向量由在线 Embedding API 生成并存入向量库
 );
 
 -- 查询历史
@@ -310,10 +312,10 @@ CREATE TABLE queries (
 
 ### 向量数据库
 
-- **支持**: Milvus、Chroma
-- **维度**: 384 (sentence-transformers)
+- **支持**: ChromaDB（默认本地持久化）
+- **维度**: 1536 (默认 `text-embedding-3-small`，可配置)
 - **距离**: 余弦相似度
-- **索引**: HNSW、IVF_FLAT
+- **存储**: 本地持久化目录 `./chroma_data`
 
 ## 🧪 运行测试
 
@@ -357,16 +359,18 @@ pytest --cov=app app/tests/ -v
 See `.env.example` files in `backend/` and `frontend/` directories.
 
 Key settings:
-- `DATABASE_URL` - PostgreSQL connection
+- `DATABASE_URL` - SQLite connection (default: `sqlite+aiosqlite:///./rag.db`)
 - `NEO4J_URL` - Neo4j connection
-- `VECTOR_DB_TYPE` - Vector DB choice (milvus, chroma, etc.)
+- `VECTOR_DB_TYPE` - Vector DB choice (default: `chroma`)
+- `EMBEDDING_API_KEY` - Online embedding API key
+- `EMBEDDING_API_BASE` - OpenAI-compatible embedding endpoint
 - `SECRET_KEY` - JWT signing key
 - `DEBUG` - Debug mode flag
 
 ### Database Setup
-1. **PostgreSQL**: Automatically initialized by Docker/docker-compose
+1. **SQLite**: Auto-created on backend startup for local development
 2. **Neo4j**: Web interface at http://localhost:7474
-3. **Milvus**: Auto-initialization with default settings
+3. **ChromaDB**: Auto-created in local path `./chroma_data`
 
 ## Deployment
 
@@ -399,7 +403,7 @@ Key K8s resources:
 - **HTTPS/TLS**: Enabled via Ingress (K8s)
 - **Authentication**: JWT tokens with refresh rotation
 - **Password Security**: bcrypt hashing
-- **Audit Logging**: All queries logged to PostgreSQL
+- **Audit Logging**: All queries logged to SQLite
 - **Data Isolation**: User-level session separation
 - **PII Protection**: Optional sensitive data redaction
 
@@ -412,14 +416,15 @@ Key K8s resources:
 
 ## Future Enhancements
 
-1. Machine learning classifier for routing decisions
-2. User feedback loop for continuous improvement
-3. Advanced caching with Redis
-4. Multi-language support
-5. Custom embedding models
-6. Federated learning for privacy
-7. Advanced analytics dashboard
-8. A/B testing framework
+1. Single-command startup script for local demo
+2. Machine learning classifier for routing decisions
+3. User feedback loop for continuous improvement
+4. Advanced caching with Redis
+5. Multi-language support
+6. Provider-switchable online embedding APIs
+7. Federated learning for privacy
+8. Advanced analytics dashboard
+9. A/B testing framework
 
 ## Contributing
 

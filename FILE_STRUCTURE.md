@@ -25,7 +25,7 @@ backend/
 │   │   ├── ✅ config.py                # Pydantic 配置 (完全实现)
 │   │   ├── ✅ security.py              # JWT & 密码工具 (完全实现)
 │   │   ├── ✅ logging_setup.py         # 日志配置 (完全实现)
-│   │   └── ✅ postgres.py              # 数据库模式
+│   │   └── ✅ postgres.py              # SQLite 优先关系数据库模型
 │   ├── ✅ models/
 │   │   ├── ✅ __init__.py
 │   │   ├── ✅ schemas.py               # Pydantic 数据结构
@@ -40,7 +40,7 @@ backend/
 │   │   └── ✅ ingest_service.py        # 文档摄入 (完全实现)
 │   ├── ✅ db/
 │   │   ├── ✅ __init__.py
-│   │   ├── ✅ postgres.py              # PostgreSQL 客户端
+│   │   ├── ✅ postgres.py              # SQLite 优先关系数据库客户端
 │   │   ├── ✅ vector_client.py         # 向量 DB 包装器
 │   │   └── ✅ neo4j_client.py          # Neo4j 客户端
 │   └── ✅ __init__.py
@@ -74,7 +74,7 @@ frontend/
 │   ├── ✅ deployment.yaml              # K8s 部署清单
 │   ├── ✅ service.yaml                 # 服务暴露
 │   ├── ✅ configmap.yaml               # 配置映射
-│   └── ✅ postgres-statefulset.yaml    # PostgreSQL StatefulSet
+│   └── ✅ neo4j-statefulset.yaml       # Neo4j StatefulSet
 └── ✅ .gitignore                       # Git 忽略配置
 ```
 
@@ -144,7 +144,7 @@ frontend/
 - ✅ session_state (状态管理)
 
 ### 数据库抽象
-- ✅ PostgreSQL 模式定义
+- ✅ SQLite 模式定义
 - ✅ Neo4j 模型定义
 - ✅ 向量数据库接口
 
@@ -199,9 +199,9 @@ frontend/
 
 ## 💾 数据库支持
 
-- ✅ PostgreSQL 15 (关系型)
+- ✅ SQLite (关系型)
 - ✅ Neo4j 5 (知识图谱)
-- ✅ Milvus/Chroma (向量数据库)
+- ✅ ChromaDB (向量数据库)
 
 ## 🔒 安全特性
 

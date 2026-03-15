@@ -29,8 +29,8 @@ The RAG Dynamic Router system is a multi-user question-answering platform that i
 - Decides strategy using rules or ML classifier
 
 #### Vector Service
-- Integrates with vector databases (Milvus, Chroma, etc.)
-- Handles text embedding generation
+- Integrates with ChromaDB for local persistent vector search
+- Uses online embedding API (OpenAI-compatible) for text embedding generation
 - Performs similarity search
 - Manages vector-to-document mapping
 
@@ -47,14 +47,14 @@ The RAG Dynamic Router system is a multi-user question-answering platform that i
 
 ### Data Layer
 
-**PostgreSQL**
+**SQLite (default local relational DB)**
 - User management and authentication
 - Session tracking
 - Query audit logs
 - Document metadata
 
-**Vector Database (Milvus/Chroma)**
-- Document embeddings and chunks
+**Vector Database (ChromaDB)**
+- Document embeddings (from online API) and chunks
 - Fast similarity search
 - Metadata indexing
 

@@ -2,7 +2,9 @@
 
 ## 🚀 30秒快速开始
 
-### 使用 Docker Compose (推荐)
+> 轻量本地运行目标：无 GPU、在线 LLM + 在线 Embedding API、SQLite + ChromaDB + 本地 Neo4j。
+
+### 使用 Docker Compose
 
 ```bash
 # 1. 确保 Docker 已安装并运行
@@ -46,6 +48,25 @@ docker-compose up --build
    - **KG 可视化**: 查看知识图谱路径
    - **系统指标**: 查看性能统计
    - **设置**: 配置 API 端点
+
+## 💻 无 GPU 本地模式（推荐给超薄本）
+
+```bash
+# 1) 后端依赖（已去除 torch / sentence-transformers / milvus 等重依赖）
+cd backend
+pip install -r requirements.txt
+copy .env.example .env
+# 在 .env 中填写：LLM_API_KEY、EMBEDDING_API_KEY、NEO4J_PASSWORD
+
+# 2) 启动后端
+cd ..
+uvicorn backend.app.main:app --host 0.0.0.0 --port 8000 --reload
+
+# 3) 启动前端（新终端）
+cd frontend
+pip install -r requirements.txt
+streamlit run streamlit_app/app.py
+```
 
 ## 📡 使用 API
 
@@ -280,7 +301,7 @@ streamlit run streamlit_app/app.py
 
 - ✅ **完整后端** - FastAPI 应用，包括所有服务
 - ✅ **完整前端** - Streamlit 应用，包括所有页面
-- ✅ **数据库模式** - PostgreSQL 和 Neo4j 定义
+- ✅ **数据库模式** - SQLite 和 Neo4j 定义（向量库为 ChromaDB）
 - ✅ **Docker 容器化** - 开发和生产配置
 - ✅ **API 文档** - 完整的 API 规范
 - ✅ **测试用例** - 系统验证脚本
@@ -314,7 +335,7 @@ streamlit run streamlit_app/app.py
 - [ ] 导入自己的文档数据
 - [ ] 自定义路由策略
 - [ ] 集成真实的 LLM 模型
-- [ ] 选择 PostgreSQL 和 Neo4j 进行部署
+- [ ] 选择 SQLite + Neo4j（本地）或按需扩展到生产数据库
 - [ ] 配置生产监控
 
 ---
