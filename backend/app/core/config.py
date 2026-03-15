@@ -21,14 +21,14 @@ class Settings(BaseSettings):
     port: int = 8000
     
     # Database
-    database_url: str = "postgresql://postgres:example@localhost:5432/ragdb"
-    neo4j_url: str = "bolt://neo4j:7687"
+    database_url: str = "sqlite+aiosqlite:///./rag.db"
+    neo4j_url: str = "bolt://localhost:7687"
     neo4j_user: str = "neo4j"
     neo4j_password: str = "testpass123"
     
     # Vector DB
-    vector_db_type: str = "milvus"  # milvus, chroma, faiss, weaviate
-    vector_db_url: str = "http://localhost:19530"
+    vector_db_type: str = "chroma"  # milvus, chroma
+    vector_db_url: str = "./chroma_data"
     embedding_model: str = "sentence-transformers/all-MiniLM-L6-v2"
     embedding_dim: int = 384
     

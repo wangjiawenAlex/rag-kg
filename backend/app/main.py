@@ -6,6 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.api.v1 import admin, auth, ingest, query
 from app.core.config import Settings, get_settings
 from app.core.logging_setup import configure_logging
+from app.db.postgres import PostgresClient
 from app.services.ingest_service import IngestService
 from app.services.kg_service import KGService
 from app.services.llm_service import create_llm_client
@@ -38,6 +39,7 @@ def create_app(settings: Settings = None) -> FastAPI:
     vector_service = VectorService(
         db_client={
             "url": settings.vector_db_url,
+            "path": settings.vector_db_url,
             "collection_name": "rag_chunks",
             "embedding_dim": settings.embedding_dim,
         },
@@ -66,14 +68,21 @@ def create_app(settings: Settings = None) -> FastAPI:
     app.state.ingest_service = ingest_service
     app.state.vector_service = vector_service
     app.state.kg_service = kg_service
+    app.state.rel_db = PostgresClient(settings.database_url)
 
     @app.on_event("startup")
     async def startup_event():
         try:
             await vector_service._ensure_ready()
-            logger.info("Milvus initialized")
+            logger.info("Vector DB initialized (chroma/local)")
         except Exception as exc:
-            logger.warning("Milvus init failed: %s", exc)
+            logger.warning("Vector DB init failed: %s", exc)
+
+        try:
+            await app.state.rel_db.initialize()
+            logger.info("SQLite initialized")
+        except Exception as exc:
+            logger.warning("SQLite init failed: %s", exc)
 
         try:
             await kg_service.connect()
@@ -83,6 +92,11 @@ def create_app(settings: Settings = None) -> FastAPI:
 
     @app.on_event("shutdown")
     async def shutdown_event():
+        try:
+            await app.state.rel_db.close()
+        except Exception:
+            pass
+
         try:
             await kg_service.close()
         except Exception:

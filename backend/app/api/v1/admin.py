@@ -191,7 +191,7 @@ async def health_check():
     """
     return {
         "status": "healthy",
-        "postgres": "connected",
+        "sqlite": "connected",
         "neo4j": "connected",
         "vector_db": "connected",
         "timestamp": str(__import__("datetime").datetime.utcnow())
