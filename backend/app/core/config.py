@@ -24,7 +24,7 @@ class Settings(BaseSettings):
     database_url: str = "postgresql://postgres:example@localhost:5432/ragdb"
     neo4j_url: str = "bolt://neo4j:7687"
     neo4j_user: str = "neo4j"
-    neo4j_password: str = "test"
+    neo4j_password: str = "testpass123"
     
     # Vector DB
     vector_db_type: str = "milvus"  # milvus, chroma, faiss, weaviate
