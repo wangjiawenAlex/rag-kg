@@ -20,7 +20,7 @@ class VectorHit:
 
 
 class VectorService:
-    """Vector search service backed by Milvus."""
+    """Vector search service backed by ChromaDB (default) or custom adapters."""
 
     def __init__(self, db_client=None, embedding_model=None, collection_name: str = "rag_chunks", embedding_dim: int = 384):
         """Initialize vector service."""
@@ -30,23 +30,24 @@ class VectorService:
         self.embedding_dim = embedding_dim
 
         self._collection = None
-        self._milvus_host = "localhost"
-        self._milvus_port = "19530"
-        self._milvus_alias = "default"
+        self._chroma_path = "./chroma_data"
+        self._chroma_collection = "rag_chunks"
 
         if isinstance(db_client, dict):
             self.collection_name = db_client.get("collection_name", self.collection_name)
             self.embedding_dim = int(db_client.get("embedding_dim", self.embedding_dim))
             url = db_client.get("url")
             if url:
-                parsed = urlparse(url)
-                self._milvus_host = parsed.hostname or self._milvus_host
-                self._milvus_port = str(parsed.port or self._milvus_port)
-            self._milvus_host = db_client.get("host", self._milvus_host)
-            self._milvus_port = str(db_client.get("port", self._milvus_port))
+                if "://" in url:
+                    parsed = urlparse(url)
+                    self._chroma_path = parsed.path or self._chroma_path
+                else:
+                    self._chroma_path = url
+            self._chroma_path = db_client.get("path", self._chroma_path)
+            self._chroma_collection = db_client.get("collection_name", self._chroma_collection)
 
     async def _ensure_ready(self) -> None:
-        """Ensure Milvus connection and collection are ready."""
+        """Ensure ChromaDB connection and collection are ready."""
         if self._collection is not None:
             return
 
@@ -54,41 +55,15 @@ class VectorService:
             # External adapter already provided.
             return
 
-        from pymilvus import (
-            Collection,
-            CollectionSchema,
-            DataType,
-            FieldSchema,
-            connections,
-            utility,
-        )
+        import chromadb
+        from chromadb.config import Settings as ChromaSettings
 
         def _connect_and_prepare():
-            connections.connect(alias=self._milvus_alias, host=self._milvus_host, port=self._milvus_port)
-
-            if not utility.has_collection(self.collection_name, using=self._milvus_alias):
-                schema = CollectionSchema(
-                    fields=[
-                        FieldSchema(name="id", dtype=DataType.VARCHAR, is_primary=True, auto_id=False, max_length=256),
-                        FieldSchema(name="text", dtype=DataType.VARCHAR, max_length=65535),
-                        FieldSchema(name="metadata", dtype=DataType.JSON),
-                        FieldSchema(name="embedding", dtype=DataType.FLOAT_VECTOR, dim=self.embedding_dim),
-                    ],
-                    description="RAG chunks",
-                    enable_dynamic_field=False,
-                )
-                collection = Collection(name=self.collection_name, schema=schema, using=self._milvus_alias)
-                index_params = {
-                    "index_type": "HNSW",
-                    "metric_type": "COSINE",
-                    "params": {"M": 8, "efConstruction": 64},
-                }
-                collection.create_index(field_name="embedding", index_params=index_params)
-            else:
-                collection = Collection(name=self.collection_name, using=self._milvus_alias)
-
-            collection.load()
-            return collection
+            client = chromadb.PersistentClient(
+                path=self._chroma_path,
+                settings=ChromaSettings(anonymized_telemetry=False),
+            )
+            return client.get_or_create_collection(name=self._chroma_collection)
 
         self._collection = await asyncio.to_thread(_connect_and_prepare)
 
@@ -113,32 +88,34 @@ class VectorService:
 
         await self._ensure_ready()
 
-        expr = None
-        if filters and "doc_id" in filters:
-            expr = f'metadata["doc_id"] == "{filters["doc_id"]}"'
 
         def _search():
-            result = self._collection.search(
-                data=[embedding],
-                anns_field="embedding",
-                param={"metric_type": "COSINE", "params": {"ef": 64}},
-                limit=top_k,
-                expr=expr,
-                output_fields=["id", "text", "metadata"],
+            where = {"doc_id": filters["doc_id"]} if filters and "doc_id" in filters else None
+            result = self._collection.query(
+                query_embeddings=[embedding],
+                n_results=top_k,
+                where=where,
+                include=["metadatas", "documents", "distances"],
             )
             return result
 
         result = await asyncio.to_thread(_search)
 
         hits: List[VectorHit] = []
-        for item in result[0]:
-            entity = item.entity
+        ids = result.get("ids", [[]])[0]
+        docs = result.get("documents", [[]])[0]
+        metas = result.get("metadatas", [[]])[0]
+        dists = result.get("distances", [[]])[0]
+
+        for idx, item_id in enumerate(ids):
+            distance = float(dists[idx]) if idx < len(dists) else 0.0
+            score = max(0.0, 1.0 - distance)
             hits.append(
                 VectorHit(
-                    id=str(entity.get("id")),
-                    text=entity.get("text", ""),
-                    score=float(item.score),
-                    metadata=entity.get("metadata", {}) or {},
+                    id=str(item_id),
+                    text=docs[idx] if idx < len(docs) else "",
+                    score=score,
+                    metadata=metas[idx] if idx < len(metas) and metas[idx] else {},
                 )
             )
         return hits
@@ -159,8 +136,12 @@ class VectorService:
         await self._ensure_ready()
 
         def _upsert():
-            self._collection.upsert([ids, texts, metadata, vectors])
-            self._collection.flush()
+            self._collection.upsert(
+                ids=ids,
+                documents=texts,
+                metadatas=metadata,
+                embeddings=vectors,
+            )
 
         await asyncio.to_thread(_upsert)
         return len(documents)
@@ -174,11 +155,9 @@ class VectorService:
             return await self.db_client.delete(ids)
 
         await self._ensure_ready()
-        quoted = ",".join([f'"{doc_id}"' for doc_id in ids])
 
         def _delete():
-            self._collection.delete(expr=f"id in [{quoted}]")
-            self._collection.flush()
+            self._collection.delete(ids=ids)
 
         await asyncio.to_thread(_delete)
         return len(ids)
