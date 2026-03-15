@@ -6,6 +6,7 @@ Handles document chunking, embedding generation, and data loading.
 
 from typing import List, Dict, Optional, Tuple
 from dataclasses import dataclass
+from app.services.kg_service import Triple
 
 
 @dataclass
