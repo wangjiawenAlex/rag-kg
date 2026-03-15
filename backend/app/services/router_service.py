@@ -124,7 +124,7 @@ class RouterService:
                 "confidence": 0.85
             },
             "latency_ms": latency_ms,
-            "sources": [c.id for c in candidates[:3]]
+            "sources": [{"id": c.id, "content": c.text[:200]} for c in candidates[:3]]
         }
     
     async def _extract_features(self, query: str) -> QueryFeatures:

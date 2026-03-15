@@ -16,6 +16,7 @@ from app.services.vector_service import VectorService
 from app.services.kg_service import KGService
 from app.services.reader_service import ReaderService, RerankerService
 from app.services.ingest_service import IngestService
+from app.services.llm_service import create_llm_client
 
 
 def create_app(settings: Settings = None) -> FastAPI:
@@ -54,7 +55,10 @@ def create_app(settings: Settings = None) -> FastAPI:
     vector_service = VectorService(None, None)
     kg_service = KGService(None, None)
     reranker = RerankerService()
-    reader = ReaderService(use_template=True)
+    
+    # Initialize LLM client
+    llm_client = create_llm_client(settings)
+    reader = ReaderService(llm_client=llm_client)
     router_service = RouterService(vector_service, kg_service, reranker, reader)
     ingest_service = IngestService(vector_service, kg_service, None)
     

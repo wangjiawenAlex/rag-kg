@@ -94,13 +94,38 @@ class ReaderService:
         
         Args:
             llm_client: Optional LLM client for generation
-            use_template: Whether to use template-based generation
+            use_template: Whether to use template-based generation (default: True for backwards compatibility)
         """
         # TODO: Implement
         # 1. Store LLM client reference
         # 2. Store template preference
         self.llm_client = llm_client
-        self.use_template = use_template
+        # If LLM client is provided, use it by default
+        self.use_template = not bool(llm_client)
+    
+    async def generate_answer(
+        self,
+        query: str,
+        candidates: List[Candidate],
+        mode: str = "concise"
+    ) -> Answer:
+        """
+        Generate answer from candidates.
+        
+        Args:
+            query: Query text
+            candidates: Ranked candidates
+            mode: Generation mode ("concise" or "detailed")
+        
+        Returns:
+            Generated answer
+        """
+        if self.llm_client:
+            return await self._llm_answer(query, candidates, mode)
+        elif self.use_template:
+            return await self._template_answer(candidates, mode)
+        else:
+            return await self._llm_answer(query, candidates, mode)
     
     async def generate_answer(
         self,
@@ -168,12 +193,45 @@ class ReaderService:
         Returns:
             Generated answer
         """
-        # Mock LLM response
-        context = "\n".join([f"- {c.text[:100]}" for c in candidates[:3]])
-        answer_text = f"Based on the retrieved information, regarding '{query}':\n{context}"
+        if not self.llm_client:
+            # Fallback to template if no LLM client
+            return await self._template_answer(candidates, mode)
         
-        return Answer(
-            text=answer_text,
-            confidence=0.85,
-            sources=[c.id for c in candidates[:3]]
-        )
+        # Build context from candidates
+        context_parts = []
+        for i, c in enumerate(candidates[:5]):  # Use top 5 candidates
+            context_parts.append(f"[{i+1}] ({c.source}) {c.text[:300]}")
+        context = "\n\n".join(context_parts)
+        
+        # Build prompt based on mode
+        if mode == "detailed":
+            system_prompt = "You are a helpful AI assistant. Provide detailed answers based on the given context. Cite your sources."
+        else:
+            system_prompt = "You are a helpful AI assistant. Provide concise answers based on the given context."
+        
+        try:
+            # Call LLM (sync version for simplicity)
+            import asyncio
+            loop = asyncio.get_event_loop()
+            if loop.is_running():
+                # If already in async context, run in executor
+                import concurrent.futures
+                with concurrent.futures.ThreadPoolExecutor() as pool:
+                    future = pool.submit(
+                        self.llm_client.generate_sync,
+                        query,
+                        context,
+                        system_prompt
+                    )
+                    response = future.result(timeout=30)
+            else:
+                response = self.llm_client.generate_sync(query, context, system_prompt)
+            
+            return Answer(
+                text=response.text,
+                confidence=0.85,
+                sources=[c.id for c in candidates[:3]]
+            )
+        except Exception as e:
+            # Fallback to template on error
+            return await self._template_answer(candidates, mode)

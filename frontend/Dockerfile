@@ -14,7 +14,7 @@ RUN apt-get update && apt-get install -y \
 COPY frontend/requirements.txt .
 
 # Install Python dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install -i https://pypi.tuna.tsinghua.edu.cn/simple --timeout 60 --no-cache-dir -r requirements.txt
 
 # Copy application code
 COPY frontend/streamlit_app ./streamlit_app

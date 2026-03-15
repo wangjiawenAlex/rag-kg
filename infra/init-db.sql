@@ -1,7 +1,7 @@
-# Database Initialization Script
+-- Database Initialization Script
 
-# This script sets up the initial database schema
-# Run this against PostgreSQL for initial setup
+-- This script sets up the initial database schema
+-- Run this against PostgreSQL for initial setup
 
 CREATE SCHEMA IF NOT EXISTS rag;
 

@@ -6,7 +6,7 @@ Handles JWT, password hashing, and authentication.
 
 from datetime import datetime, timedelta
 from typing import Optional
-import jwt
+from jose import jwt
 from passlib.context import CryptContext
 
 

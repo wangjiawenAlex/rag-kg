@@ -22,7 +22,7 @@ services:
 
   # Neo4j Knowledge Graph
   neo4j:
-    image: neo4j:5-apoc
+    image: neo4j:5.14.0
     container_name: rag_neo4j
     environment:
       NEO4J_AUTH: neo4j/testpass123
@@ -34,22 +34,41 @@ services:
       - "7474:7474"  # HTTP
       - "7687:7687"  # Bolt
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:7474"]
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:7474"]
       interval: 10s
       timeout: 5s
       retries: 5
 
+  # etcd for Milvus coordination
+  etcd:
+    image: quay.io/coreos/etcd:v3.5.5
+    container_name: rag_etcd
+    environment:
+      - ETCD_AUTO_COMPACTION_MODE=revision
+      - ETCD_AUTO_COMPACTION_RETENTION=1000
+      - ETCD_QUOTA_BACKEND_BYTES=4294967296
+      - ETCD_SNAPSHOT_COUNT=50000
+    volumes:
+      - etcd_data:/etcd
+    ports:
+      - "2379:2379"
+    command: etcd -advertise-client-urls=http://127.0.0.1:2379 -listen-client-urls http://0.0.0.0:2379 --data-dir /etcd
+
   # Milvus Vector Database
   milvus:
-    image: milvusdb/milvus:latest
+    image: milvusdb/milvus:v2.3.3
     container_name: rag_milvus
     environment:
       COMMON_STORAGETYPE: local
+      ETCD_ENDPOINTS: etcd:2379
     volumes:
       - milvus_data:/var/lib/milvus
     ports:
       - "19530:19530"
       - "9091:9091"
+    command: ["milvus", "run", "standalone"]
+    depends_on:
+      - etcd
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:9091/healthz"]
       interval: 10s
@@ -59,7 +78,7 @@ services:
   # Backend FastAPI Service
   backend:
     build:
-      context: .
+      context: ..
       dockerfile: backend/Dockerfile
     container_name: rag_backend
     environment:
@@ -83,17 +102,15 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-    volumes:
-      - ./backend:/app
 
   # Frontend Streamlit Service
   frontend:
     build:
-      context: .
+      context: ..
       dockerfile: frontend/Dockerfile
     container_name: rag_frontend
     environment:
-      API_ENDPOINT: "http://backend:8000/api/v1"
+      API_ENDPOINT: "http://backend:8000"
     ports:
       - "8501:8501"
     depends_on:
@@ -103,14 +120,13 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-    volumes:
-      - ./frontend:/app
 
 volumes:
   postgres_data:
   neo4j_data:
   neo4j_logs:
   milvus_data:
+  etcd_data:
 
 networks:
   default:

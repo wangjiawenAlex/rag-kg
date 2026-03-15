@@ -81,7 +81,7 @@ class IngestService:
                         text=chunk_text,
                         chunk_index=i,
                         metadata={
-                            **doc.metadata or {},
+                            **(doc.metadata or {}),
                             "source": doc.source,
                             "title": doc.title
                         }

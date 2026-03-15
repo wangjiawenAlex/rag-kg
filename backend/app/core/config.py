@@ -47,6 +47,14 @@ class Settings(BaseSettings):
     log_level: str = "INFO"
     log_file: Optional[str] = None
     
+    # LLM Configuration (DeepSeek / 通义千问)
+    llm_provider: str = "deepseek"  # deepseek, tongyi, openai
+    llm_api_key: Optional[str] = None
+    llm_api_base: Optional[str] = None
+    llm_model: str = "deepseek-chat"
+    llm_temperature: float = 0.7
+    llm_max_tokens: int = 2000
+    
     class Config:
         """Pydantic config."""
         env_file = ".env"
