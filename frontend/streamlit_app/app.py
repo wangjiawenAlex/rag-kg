@@ -19,6 +19,10 @@ def main():
     # Initialize session state
     utils.init_session_state()
     
+    # 初始化语言设置
+    if "language" not in st.session_state:
+        st.session_state.language = "en"
+    
     # Configure page
     st.set_page_config(
         page_title="RAG Dynamic Router",
@@ -46,53 +50,60 @@ def main():
     
     # Sidebar
     with st.sidebar:
+        # 语言切换
+        lang_options = ["en", "中文"]
+        lang_index = 0 if st.session_state.language == "en" else 1
+        selected_lang = st.selectbox("Language / 语言", options=lang_options, index=lang_index, key="lang_switch")
+        st.session_state.language = "en" if selected_lang == "en" else "zh"
+        
         st.title("🔍 RAG Dynamic Router")
         st.divider()
         
         # User info
-        st.write(f"**User:** {st.session_state.get('username', 'unknown')}")
+        st.write(f"**{utils.t('User')}:** {st.session_state.get('username', 'unknown')}")
         
         # Navigation
         page = st.radio(
-            "Navigation",
+            utils.t("Navigation"),
             options=[
-                "Query",
-                "History",
-                "KG Visualization",
-                "Metrics",
-                "Settings",
-                "Logout"
+                utils.t("Query"),
+                utils.t("History"),
+                utils.t("KG Visualization"),
+                utils.t("Metrics"),
+                utils.t("Settings"),
+                utils.t("Logout")
             ],
             index=0
         )
         
         st.divider()
-        st.caption("Version 1.0.0")
+        st.caption(utils.t("Version 1.0.0"))
     
     # Route pages
-    if page == "Query":
+    # 使用翻译后的文本进行判断
+    if page == utils.t("Query") or page == "Query":
         query_ui.show_query_page()
-    elif page == "History":
+    elif page == utils.t("History") or page == "History":
         show_history_page()
-    elif page == "KG Visualization":
+    elif page == utils.t("KG Visualization") or page == "KG Visualization":
         show_kg_page()
-    elif page == "Metrics":
+    elif page == utils.t("Metrics") or page == "Metrics":
         show_metrics_page()
-    elif page == "Settings":
+    elif page == utils.t("Settings") or page == "Settings":
         utils.render_settings_page()
-    elif page == "Logout":
+    elif page == utils.t("Logout") or page == "Logout":
         auth.logout()
 
 
 def show_history_page():
     """Show query history page."""
-    st.header("📋 Query History")
+    st.header(f"📋 {utils.t('Query History')}")
     
     if "query_history" not in st.session_state or not st.session_state.query_history:
-        st.info("No queries in history yet. Submit a query to start.")
+        st.info(utils.t("No queries in history yet"))
         return
     
-    st.markdown(f"**Total Queries:** {len(st.session_state.query_history)}")
+    st.markdown(f"**{utils.t('Total Queries')}:** {len(st.session_state.query_history)}")
     st.markdown("---")
     
     # Display history in reverse order (most recent first)
@@ -104,19 +115,19 @@ def show_history_page():
         
         with col2:
             if item['status'] == 'success':
-                st.write("✅ Success")
+                st.write(f"✅ {utils.t('Success')}")
             else:
-                st.write("❌ Failed")
+                st.write(f"❌ {utils.t('Failed')}")
         
         with col3:
             st.write(f"{item['timestamp']}")
         
-        with st.expander("Details"):
+        with st.expander(utils.t("Details")):
             st.write(f"**Query:** {item['query']}")
             st.write(f"**Status:** {item['status']}")
             
             if item['status'] == 'success':
-                st.write(f"**Answer:** {item['answer'][:300]}...")
+                st.write(f"**{utils.t('Answer')}:** {item['answer'][:300]}...")
                 st.write(f"**Latency:** {item.get('latency_ms', 'N/A')}ms")
                 st.write(f"**Strategy:** {item.get('strategy', 'N/A')}")
             
@@ -126,7 +137,7 @@ def show_history_page():
     col1, col2 = st.columns(2)
     
     with col1:
-        if st.button("📥 Export as JSON"):
+        if st.button(f"📥 {utils.t('Export as JSON')}"):
             import json
             json_data = json.dumps(st.session_state.query_history, indent=2)
             st.download_button(
@@ -137,7 +148,7 @@ def show_history_page():
             )
     
     with col2:
-        if st.button("🗑️ Clear History"):
+        if st.button(f"🗑️ {utils.t('Clear History')}"):
             st.session_state.query_history = []
             st.success("History cleared!")
             st.rerun()
@@ -145,7 +156,7 @@ def show_history_page():
 
 def show_kg_page():
     """Show knowledge graph visualization page."""
-    st.header("📊 Knowledge Graph Visualization")
+    st.header(f"📊 {utils.t('Knowledge Graph Visualization')}")
     
     st.info("Knowledge graph visualization from recent queries.")
     
@@ -186,7 +197,7 @@ def show_kg_page():
 
 def show_metrics_page():
     """Show metrics and statistics page."""
-    st.header("📈 System Metrics")
+    st.header(f"📈 {utils.t('System Metrics')}")
     
     # Summary metrics
     col1, col2, col3, col4 = st.columns(4)

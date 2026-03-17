@@ -10,10 +10,16 @@ from typing import Dict, List, Optional
 import json
 from datetime import datetime
 
+# 导入翻译函数
+import sys
+import os
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from streamlit_app import utils
+
 
 def show_query_page():
     """Display main query page."""
-    st.header("🔍 Query RAG System")
+    st.header(f"🔍 {utils.t('Query RAG System')}")
     
     st.markdown("Submit a question and the system will retrieve relevant information using dynamic routing.")
     st.markdown("---")
@@ -23,18 +29,18 @@ def show_query_page():
     
     with col1:
         query = st.text_area(
-            "Ask a question:",
+            utils.t("Ask a question:"),
             placeholder="e.g., What are the key features of product X?",
             height=100,
             key="query_input"
         )
     
     with col2:
-        st.subheader("Settings")
-        top_k = st.slider("Top K Results", 1, 10, 5, key="top_k_slider")
+        st.subheader(utils.t("Settings"))
+        top_k = st.slider(utils.t("Top K Results"), 1, 10, 5, key="top_k_slider")
         router_hint = st.selectbox(
-            "Strategy Hint",
-            ["AUTO", "VECTOR_ONLY", "KG_ONLY", "KG_THEN_VECTOR", "HYBRID_JOIN"],
+            utils.t("Strategy Hint"),
+            [utils.t("AUTO"), "VECTOR_ONLY", "KG_ONLY", "KG_THEN_VECTOR", "HYBRID_JOIN"],
             key="router_hint"
         )
     
@@ -43,15 +49,15 @@ def show_query_page():
     col1, col2 = st.columns([1, 1])
     
     with col1:
-        search_button = st.button("🚀 Submit Query", use_container_width=True, type="primary")
+        search_button = st.button(f"🚀 {utils.t('Submit Query')}", use_container_width=True, type="primary")
     
     with col2:
-        clear_button = st.button("🗑️ Clear", use_container_width=True)
+        clear_button = st.button(f"🗑️ {utils.t('Clear')}", use_container_width=True)
     
     # Handle actions
     if search_button:
         if query.strip():
-            submit_query(query, top_k, router_hint if router_hint != "AUTO" else None)
+            submit_query(query, top_k, router_hint if router_hint != utils.t("AUTO") else None)
         else:
             st.error("Please enter a question")
     
@@ -62,14 +68,14 @@ def show_query_page():
     # Display recent history
     if "query_history" in st.session_state and st.session_state.query_history:
         st.markdown("---")
-        st.subheader("📝 Recent Queries")
+        st.subheader(f"📝 {utils.t('Recent Queries')}")
         
         for idx, item in enumerate(reversed(st.session_state.query_history[-5:])):
             with st.expander(f"{item['query'][:60]}..." if len(item['query']) > 60 else item['query']):
                 st.write(f"**Time:** {item['timestamp']}")
                 st.write(f"**Status:** {item['status']}")
                 if item['status'] == "success":
-                    st.write(f"**Answer:** {item['answer'][:200]}...")
+                    st.write(f"**{utils.t('Answer')}:** {item['answer'][:200]}...")
                     st.write(f"**Latency:** {item.get('latency_ms', 'N/A')}ms")
                     st.write(f"**Strategy:** {item.get('strategy', 'N/A')}")
 
@@ -206,7 +212,7 @@ def display_results(result: Dict):
     # Evidence
     if result.get("evidence"):
         st.markdown("---")
-        st.subheader("📚 Evidence Sources")
+        st.subheader(f"📚 {utils.t('Evidence Sources')}")
         
         for idx, evid in enumerate(result.get("evidence", []), 1):
             with st.expander(f"Source {idx}: {evid.get('title', 'Untitled')[:50]}"):
@@ -217,7 +223,7 @@ def display_results(result: Dict):
                     st.write(f"**Metadata:** {json.dumps(evid.get('metadata'), indent=2)}")
     
     # Tabs for additional info
-    tab1, tab2, tab3, tab4 = st.tabs(["Evidence", "Knowledge Graph", "Router Decision", "Metrics"])
+    tab1, tab2, tab3, tab4 = st.tabs([utils.t("Evidence Sources"), "Knowledge Graph", utils.t("Routing Decision"), utils.t("Performance Metrics")])
     
     with tab1:
         display_evidence(result.get("evidence", []))
@@ -289,7 +295,7 @@ def display_router_decision(router_decision: Dict):
     # 2. Show explanation/reason
     # 3. Show confidence score if available
     
-    st.subheader("Routing Decision")
+    st.subheader(utils.t("Routing Decision"))
     
     if router_decision:
         col1, col2, col3 = st.columns(3)
@@ -327,7 +333,7 @@ def display_metrics(result: Dict):
     # 2. Show number of retrievals
     # 3. Show score distribution
     
-    st.subheader("Performance Metrics")
+    st.subheader(utils.t("Performance Metrics"))
     
     col1, col2, col3 = st.columns(3)
     

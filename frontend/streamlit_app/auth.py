@@ -9,28 +9,34 @@ import requests
 from typing import Optional
 import json
 
+# 导入翻译函数
+import sys
+import os
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from streamlit_app import utils
+
 
 def show_login_page():
     """Display login page."""
-    st.title("🤖 RAG Dynamic Router")
+    st.title(f"🤖 {utils.t('RAG Dynamic Router')}")
     st.markdown("---")
     
     col1, col2, col3 = st.columns([1, 2, 1])
     
     with col2:
-        st.subheader("🔐 Sign In")
+        st.subheader(f"🔐 {utils.t('Sign In')}")
         
-        username = st.text_input("Username", placeholder="Enter username", key="login_username")
-        password = st.text_input("Password", type="password", placeholder="Enter password", key="login_password")
+        username = st.text_input(utils.t("Username"), placeholder=utils.t("Enter username"), key="login_username")
+        password = st.text_input(utils.t("Password"), type="password", placeholder=utils.t("Enter password"), key="login_password")
         
-        if st.button("Login", use_container_width=True, type="primary"):
+        if st.button(utils.t("Login"), use_container_width=True, type="primary"):
             login_user(username, password)
         
         st.markdown("---")
         st.info("**Demo Credentials:**\n\nUsername: `demo`\n\nPassword: `demo123`")
         
         st.markdown("---")
-        st.caption("© 2025 RAG Router System v1.0.0")
+        st.caption(f"© 2025 RAG Router System {utils.t('Version 1.0.0')}")
 
 
 def login_user(username: str, password: str):

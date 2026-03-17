@@ -323,3 +323,96 @@ def render_settings_page():
     - Session history tracking
     - Real-time performance metrics
     """)
+
+
+# ==================== 翻译函数 ====================
+def t(key: str):
+    """
+    翻译函数，根据语言返回对应文本
+    
+    Args:
+        key: 翻译键名
+        
+    Returns:
+        对应语言的文本
+    """
+    import streamlit as st
+    
+    translations = {
+        "zh": {
+            # 导航菜单
+            "Query": "查询",
+            "History": "历史记录",
+            "KG Visualization": "知识图谱",
+            "Metrics": "系统指标",
+            "Settings": "设置",
+            "Logout": "退出登录",
+            # 页面标题
+            "Query RAG System": "RAG智能问答系统",
+            "Query History": "查询历史",
+            "Knowledge Graph Visualization": "知识图谱可视化",
+            "System Metrics": "系统指标",
+            # 通用
+            "No queries in history yet": "暂无查询记录",
+            "Total Queries": "总查询数",
+            "Success": "成功",
+            "Failed": "失败",
+            "Details": "详情",
+            "Export as JSON": "导出JSON",
+            "Clear History": "清除历史",
+            "Version 1.0.0": "版本 1.0.0",
+            "Navigation": "导航",
+            "User": "用户",
+            "Ask a question:": "请输入您的问题：",
+            "Top K Results": "返回结果数",
+            "Strategy Hint": "路由策略",
+            "AUTO": "自动",
+            "🚀 Submit Query": "🚀 提交查询",
+            "🗑️ Clear": "🗑️ 清除",
+            "📝 Recent Queries": "📝 最近查询",
+            "💡 Answer": "💡 答案",
+            "📚 Evidence Sources": "📚 证据来源",
+            "Routing Decision": "路由决策",
+            "Performance Metrics": "性能指标",
+            "Login to RAG System": "登录RAG系统",
+            "Username": "用户名",
+            "Password": "密码",
+            "Login": "登录",
+            "Logout": "退出",
+            "Submit Query": "提交查询",
+            "Clear": "清除",
+            "Answer": "答案",
+            "Evidence Sources": "证据来源",
+            "RAG Dynamic Router": "RAG动态路由器",
+            "Sign In": "登录",
+            "Sign Out": "退出",
+            "Settings": "设置",
+            "Display Preferences": "显示偏好",
+            "Results per page": "每页结果数",
+            "Auto-refresh history": "自动刷新历史",
+            "About": "关于",
+            "Version": "版本",
+            "Sign In to RAG System": "登录 RAG 智能问答系统",
+            "Enter username": "请输入用户名",
+            "Enter password": "请输入密码",
+            "Login failed": "登录失败",
+            "Connection error": "连接错误",
+            "Please enter both username and password": "请输入用户名和密码",
+            "Login successful! Redirecting...": "登录成功！正在跳转...",
+            "Not authenticated. Please login first.": "未登录，请先登录",
+            "Query": "查询",
+        },
+        "en": {
+            # English - 原版英文
+        }
+    }
+    
+    # 获取当前语言，默认为英文
+    lang = st.session_state.get("language", "en")
+    return translations.get(lang, translations["en"]).get(key, key)
+
+
+def get_current_language() -> str:
+    """获取当前语言设置"""
+    import streamlit as st
+    return st.session_state.get("language", "en")
