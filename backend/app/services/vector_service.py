@@ -133,12 +133,27 @@ class VectorService:
         hits: List[VectorHit] = []
         for item in result[0]:
             entity = item.entity
+            text_val = ""
+            try:
+                text_val = entity.get("text")
+            except:
+                pass
+            id_val = ""
+            try:
+                id_val = entity.get("id")
+            except:
+                pass
+            meta_val = {}
+            try:
+                meta_val = entity.get("metadata") or {}
+            except:
+                pass
             hits.append(
                 VectorHit(
-                    id=str(entity.get("id")),
-                    text=entity.get("text", ""),
+                    id=str(id_val),
+                    text=text_val,
                     score=float(item.score),
-                    metadata=entity.get("metadata", {}) or {},
+                    metadata=meta_val,
                 )
             )
         return hits

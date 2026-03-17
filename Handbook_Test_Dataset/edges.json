@@ -1,0 +1,1372 @@
+[
+  {
+    "from": "EMP002",
+    "to": "EMP001",
+    "relation": "汇报给"
+  },
+  {
+    "from": "EMP003",
+    "to": "EMP001",
+    "relation": "汇报给"
+  },
+  {
+    "from": "EMP004",
+    "to": "EMP001",
+    "relation": "汇报给"
+  },
+  {
+    "from": "EMP005",
+    "to": "EMP001",
+    "relation": "汇报给"
+  },
+  {
+    "from": "EMP006",
+    "to": "EMP001",
+    "relation": "汇报给"
+  },
+  {
+    "from": "EMP007",
+    "to": "EMP002",
+    "relation": "汇报给"
+  },
+  {
+    "from": "EMP008",
+    "to": "EMP003",
+    "relation": "汇报给"
+  },
+  {
+    "from": "EMP009",
+    "to": "EMP004",
+    "relation": "汇报给"
+  },
+  {
+    "from": "EMP010",
+    "to": "EMP005",
+    "relation": "汇报给"
+  },
+  {
+    "from": "EMP011",
+    "to": "EMP006",
+    "relation": "汇报给"
+  },
+  {
+    "from": "EMP012",
+    "to": "EMP007",
+    "relation": "汇报给"
+  },
+  {
+    "from": "EMP013",
+    "to": "EMP008",
+    "relation": "汇报给"
+  },
+  {
+    "from": "EMP014",
+    "to": "EMP009",
+    "relation": "汇报给"
+  },
+  {
+    "from": "EMP015",
+    "to": "EMP010",
+    "relation": "汇报给"
+  },
+  {
+    "from": "EMP016",
+    "to": "EMP011",
+    "relation": "汇报给"
+  },
+  {
+    "from": "EMP017",
+    "to": "EMP012",
+    "relation": "汇报给"
+  },
+  {
+    "from": "EMP018",
+    "to": "EMP013",
+    "relation": "汇报给"
+  },
+  {
+    "from": "EMP019",
+    "to": "EMP014",
+    "relation": "汇报给"
+  },
+  {
+    "from": "EMP020",
+    "to": "EMP015",
+    "relation": "汇报给"
+  },
+  {
+    "from": "EMP021",
+    "to": "EMP016",
+    "relation": "汇报给"
+  },
+  {
+    "from": "EMP022",
+    "to": "EMP017",
+    "relation": "汇报给"
+  },
+  {
+    "from": "EMP023",
+    "to": "EMP018",
+    "relation": "汇报给"
+  },
+  {
+    "from": "EMP024",
+    "to": "EMP019",
+    "relation": "汇报给"
+  },
+  {
+    "from": "EMP025",
+    "to": "EMP020",
+    "relation": "汇报给"
+  },
+  {
+    "from": "EMP026",
+    "to": "EMP021",
+    "relation": "汇报给"
+  },
+  {
+    "from": "EMP027",
+    "to": "EMP022",
+    "relation": "汇报给"
+  },
+  {
+    "from": "EMP028",
+    "to": "EMP023",
+    "relation": "汇报给"
+  },
+  {
+    "from": "EMP029",
+    "to": "EMP024",
+    "relation": "汇报给"
+  },
+  {
+    "from": "EMP030",
+    "to": "EMP025",
+    "relation": "汇报给"
+  },
+  {
+    "from": "EMP031",
+    "to": "EMP026",
+    "relation": "汇报给"
+  },
+  {
+    "from": "EMP032",
+    "to": "EMP027",
+    "relation": "汇报给"
+  },
+  {
+    "from": "EMP033",
+    "to": "EMP028",
+    "relation": "汇报给"
+  },
+  {
+    "from": "EMP034",
+    "to": "EMP029",
+    "relation": "汇报给"
+  },
+  {
+    "from": "EMP035",
+    "to": "EMP030",
+    "relation": "汇报给"
+  },
+  {
+    "from": "EMP036",
+    "to": "EMP031",
+    "relation": "汇报给"
+  },
+  {
+    "from": "EMP037",
+    "to": "EMP032",
+    "relation": "汇报给"
+  },
+  {
+    "from": "EMP038",
+    "to": "EMP033",
+    "relation": "汇报给"
+  },
+  {
+    "from": "EMP039",
+    "to": "EMP034",
+    "relation": "汇报给"
+  },
+  {
+    "from": "EMP040",
+    "to": "EMP035",
+    "relation": "汇报给"
+  },
+  {
+    "from": "EMP041",
+    "to": "EMP036",
+    "relation": "汇报给"
+  },
+  {
+    "from": "EMP042",
+    "to": "EMP037",
+    "relation": "汇报给"
+  },
+  {
+    "from": "EMP043",
+    "to": "EMP038",
+    "relation": "汇报给"
+  },
+  {
+    "from": "EMP044",
+    "to": "EMP039",
+    "relation": "汇报给"
+  },
+  {
+    "from": "EMP045",
+    "to": "EMP040",
+    "relation": "汇报给"
+  },
+  {
+    "from": "EMP046",
+    "to": "EMP041",
+    "relation": "汇报给"
+  },
+  {
+    "from": "EMP047",
+    "to": "EMP042",
+    "relation": "汇报给"
+  },
+  {
+    "from": "EMP048",
+    "to": "EMP043",
+    "relation": "汇报给"
+  },
+  {
+    "from": "EMP049",
+    "to": "EMP044",
+    "relation": "汇报给"
+  },
+  {
+    "from": "EMP050",
+    "to": "EMP045",
+    "relation": "汇报给"
+  },
+  {
+    "from": "技术部",
+    "to": "前端组",
+    "relation": "管辖"
+  },
+  {
+    "from": "技术部",
+    "to": "后端组",
+    "relation": "管辖"
+  },
+  {
+    "from": "技术部",
+    "to": "测试组",
+    "relation": "管辖"
+  },
+  {
+    "from": "技术部",
+    "to": "AI组",
+    "relation": "管辖"
+  },
+  {
+    "from": "销售部",
+    "to": "销售一组",
+    "relation": "管辖"
+  },
+  {
+    "from": "销售部",
+    "to": "销售二组",
+    "relation": "管辖"
+  },
+  {
+    "from": "销售部",
+    "to": "大客户部",
+    "relation": "管辖"
+  },
+  {
+    "from": "市场部",
+    "to": "品牌组",
+    "relation": "管辖"
+  },
+  {
+    "from": "市场部",
+    "to": "公关组",
+    "relation": "管辖"
+  },
+  {
+    "from": "人事部",
+    "to": "招聘组",
+    "relation": "管辖"
+  },
+  {
+    "from": "人事部",
+    "to": "薪酬组",
+    "relation": "管辖"
+  },
+  {
+    "from": "财务部",
+    "to": "核算组",
+    "relation": "管辖"
+  },
+  {
+    "from": "财务部",
+    "to": "审计组",
+    "relation": "管辖"
+  },
+  {
+    "from": "运营部",
+    "to": "内容组",
+    "relation": "管辖"
+  },
+  {
+    "from": "产品部",
+    "to": "产品设计组",
+    "relation": "管辖"
+  },
+  {
+    "from": "客服部",
+    "to": "售后支持组",
+    "relation": "管辖"
+  },
+  {
+    "from": "EMP050",
+    "to": "HR-2024-024",
+    "relation": "适用"
+  },
+  {
+    "from": "EMP046",
+    "to": "HR-2024-024",
+    "relation": "适用"
+  },
+  {
+    "from": "EMP040",
+    "to": "HR-2024-025",
+    "relation": "适用"
+  },
+  {
+    "from": "EMP046",
+    "to": "HR-2024-023",
+    "relation": "适用"
+  },
+  {
+    "from": "EMP019",
+    "to": "HR-2024-025",
+    "relation": "适用"
+  },
+  {
+    "from": "EMP013",
+    "to": "HR-2024-006",
+    "relation": "适用"
+  },
+  {
+    "from": "EMP021",
+    "to": "HR-2024-006",
+    "relation": "适用"
+  },
+  {
+    "from": "EMP029",
+    "to": "HR-2024-015",
+    "relation": "适用"
+  },
+  {
+    "from": "EMP039",
+    "to": "HR-2024-001",
+    "relation": "适用"
+  },
+  {
+    "from": "EMP022",
+    "to": "HR-2024-008",
+    "relation": "适用"
+  },
+  {
+    "from": "EMP029",
+    "to": "HR-2024-002",
+    "relation": "适用"
+  },
+  {
+    "from": "EMP013",
+    "to": "HR-2024-003",
+    "relation": "适用"
+  },
+  {
+    "from": "EMP003",
+    "to": "HR-2024-006",
+    "relation": "适用"
+  },
+  {
+    "from": "EMP020",
+    "to": "HR-2024-009",
+    "relation": "适用"
+  },
+  {
+    "from": "EMP015",
+    "to": "HR-2024-001",
+    "relation": "适用"
+  },
+  {
+    "from": "EMP031",
+    "to": "HR-2024-010",
+    "relation": "适用"
+  },
+  {
+    "from": "EMP016",
+    "to": "HR-2024-006",
+    "relation": "适用"
+  },
+  {
+    "from": "EMP036",
+    "to": "HR-2024-001",
+    "relation": "适用"
+  },
+  {
+    "from": "EMP030",
+    "to": "HR-2024-020",
+    "relation": "适用"
+  },
+  {
+    "from": "EMP023",
+    "to": "HR-2024-024",
+    "relation": "适用"
+  },
+  {
+    "from": "EMP033",
+    "to": "HR-2024-023",
+    "relation": "适用"
+  },
+  {
+    "from": "EMP030",
+    "to": "HR-2024-019",
+    "relation": "适用"
+  },
+  {
+    "from": "EMP027",
+    "to": "HR-2024-021",
+    "relation": "适用"
+  },
+  {
+    "from": "EMP006",
+    "to": "HR-2024-024",
+    "relation": "适用"
+  },
+  {
+    "from": "EMP019",
+    "to": "HR-2024-009",
+    "relation": "适用"
+  },
+  {
+    "from": "EMP010",
+    "to": "HR-2024-014",
+    "relation": "适用"
+  },
+  {
+    "from": "EMP047",
+    "to": "HR-2024-021",
+    "relation": "适用"
+  },
+  {
+    "from": "EMP035",
+    "to": "HR-2024-024",
+    "relation": "适用"
+  },
+  {
+    "from": "EMP009",
+    "to": "HR-2024-022",
+    "relation": "适用"
+  },
+  {
+    "from": "EMP030",
+    "to": "HR-2024-019",
+    "relation": "适用"
+  },
+  {
+    "from": "EMP008",
+    "to": "HR-2024-015",
+    "relation": "适用"
+  },
+  {
+    "from": "EMP004",
+    "to": "HR-2024-003",
+    "relation": "适用"
+  },
+  {
+    "from": "EMP038",
+    "to": "HR-2024-021",
+    "relation": "适用"
+  },
+  {
+    "from": "EMP018",
+    "to": "HR-2024-023",
+    "relation": "适用"
+  },
+  {
+    "from": "EMP033",
+    "to": "HR-2024-005",
+    "relation": "适用"
+  },
+  {
+    "from": "EMP012",
+    "to": "HR-2024-007",
+    "relation": "适用"
+  },
+  {
+    "from": "EMP030",
+    "to": "HR-2024-003",
+    "relation": "适用"
+  },
+  {
+    "from": "EMP035",
+    "to": "HR-2024-011",
+    "relation": "适用"
+  },
+  {
+    "from": "EMP050",
+    "to": "HR-2024-019",
+    "relation": "适用"
+  },
+  {
+    "from": "EMP041",
+    "to": "HR-2024-009",
+    "relation": "适用"
+  },
+  {
+    "from": "EMP037",
+    "to": "HR-2024-024",
+    "relation": "适用"
+  },
+  {
+    "from": "EMP005",
+    "to": "HR-2024-025",
+    "relation": "适用"
+  },
+  {
+    "from": "EMP018",
+    "to": "HR-2024-012",
+    "relation": "适用"
+  },
+  {
+    "from": "EMP041",
+    "to": "HR-2024-002",
+    "relation": "适用"
+  },
+  {
+    "from": "EMP004",
+    "to": "HR-2024-017",
+    "relation": "适用"
+  },
+  {
+    "from": "EMP001",
+    "to": "HR-2024-005",
+    "relation": "适用"
+  },
+  {
+    "from": "EMP044",
+    "to": "HR-2024-018",
+    "relation": "适用"
+  },
+  {
+    "from": "EMP001",
+    "to": "HR-2024-003",
+    "relation": "适用"
+  },
+  {
+    "from": "EMP028",
+    "to": "HR-2024-008",
+    "relation": "适用"
+  },
+  {
+    "from": "EMP047",
+    "to": "HR-2024-022",
+    "relation": "适用"
+  },
+  {
+    "from": "EMP031",
+    "to": "HR-2024-006",
+    "relation": "适用"
+  },
+  {
+    "from": "EMP035",
+    "to": "HR-2024-024",
+    "relation": "适用"
+  },
+  {
+    "from": "EMP045",
+    "to": "HR-2024-025",
+    "relation": "适用"
+  },
+  {
+    "from": "EMP043",
+    "to": "HR-2024-011",
+    "relation": "适用"
+  },
+  {
+    "from": "EMP004",
+    "to": "HR-2024-001",
+    "relation": "适用"
+  },
+  {
+    "from": "EMP010",
+    "to": "HR-2024-011",
+    "relation": "适用"
+  },
+  {
+    "from": "EMP017",
+    "to": "HR-2024-006",
+    "relation": "适用"
+  },
+  {
+    "from": "EMP028",
+    "to": "HR-2024-024",
+    "relation": "适用"
+  },
+  {
+    "from": "EMP003",
+    "to": "HR-2024-018",
+    "relation": "适用"
+  },
+  {
+    "from": "EMP001",
+    "to": "HR-2024-017",
+    "relation": "适用"
+  },
+  {
+    "from": "EMP016",
+    "to": "HR-2024-015",
+    "relation": "适用"
+  },
+  {
+    "from": "EMP045",
+    "to": "HR-2024-011",
+    "relation": "适用"
+  },
+  {
+    "from": "EMP043",
+    "to": "HR-2024-017",
+    "relation": "适用"
+  },
+  {
+    "from": "EMP048",
+    "to": "HR-2024-025",
+    "relation": "适用"
+  },
+  {
+    "from": "EMP021",
+    "to": "HR-2024-001",
+    "relation": "适用"
+  },
+  {
+    "from": "EMP045",
+    "to": "HR-2024-012",
+    "relation": "适用"
+  },
+  {
+    "from": "EMP016",
+    "to": "HR-2024-018",
+    "relation": "适用"
+  },
+  {
+    "from": "EMP014",
+    "to": "HR-2024-025",
+    "relation": "适用"
+  },
+  {
+    "from": "EMP009",
+    "to": "HR-2024-008",
+    "relation": "适用"
+  },
+  {
+    "from": "EMP047",
+    "to": "HR-2024-012",
+    "relation": "适用"
+  },
+  {
+    "from": "EMP048",
+    "to": "HR-2024-018",
+    "relation": "适用"
+  },
+  {
+    "from": "EMP005",
+    "to": "HR-2024-006",
+    "relation": "适用"
+  },
+  {
+    "from": "EMP026",
+    "to": "HR-2024-001",
+    "relation": "适用"
+  },
+  {
+    "from": "EMP002",
+    "to": "HR-2024-023",
+    "relation": "适用"
+  },
+  {
+    "from": "EMP001",
+    "to": "HR-2024-003",
+    "relation": "适用"
+  },
+  {
+    "from": "EMP037",
+    "to": "HR-2024-018",
+    "relation": "适用"
+  },
+  {
+    "from": "EMP027",
+    "to": "HR-2024-005",
+    "relation": "适用"
+  },
+  {
+    "from": "EMP025",
+    "to": "HR-2024-025",
+    "relation": "适用"
+  },
+  {
+    "from": "EMP010",
+    "to": "HR-2024-016",
+    "relation": "适用"
+  },
+  {
+    "from": "EMP033",
+    "to": "HR-2024-017",
+    "relation": "适用"
+  },
+  {
+    "from": "HR-2024-001",
+    "to": "PROC-013",
+    "relation": "引用"
+  },
+  {
+    "from": "HR-2024-002",
+    "to": "PROC-006",
+    "relation": "引用"
+  },
+  {
+    "from": "HR-2024-003",
+    "to": "PROC-012",
+    "relation": "引用"
+  },
+  {
+    "from": "HR-2024-004",
+    "to": "PROC-018",
+    "relation": "引用"
+  },
+  {
+    "from": "HR-2024-005",
+    "to": "PROC-012",
+    "relation": "引用"
+  },
+  {
+    "from": "HR-2024-006",
+    "to": "PROC-017",
+    "relation": "引用"
+  },
+  {
+    "from": "HR-2024-007",
+    "to": "PROC-020",
+    "relation": "引用"
+  },
+  {
+    "from": "HR-2024-008",
+    "to": "PROC-006",
+    "relation": "引用"
+  },
+  {
+    "from": "HR-2024-009",
+    "to": "PROC-012",
+    "relation": "引用"
+  },
+  {
+    "from": "HR-2024-010",
+    "to": "PROC-007",
+    "relation": "引用"
+  },
+  {
+    "from": "HR-2024-011",
+    "to": "PROC-010",
+    "relation": "引用"
+  },
+  {
+    "from": "HR-2024-012",
+    "to": "PROC-004",
+    "relation": "引用"
+  },
+  {
+    "from": "HR-2024-013",
+    "to": "PROC-007",
+    "relation": "引用"
+  },
+  {
+    "from": "HR-2024-014",
+    "to": "PROC-008",
+    "relation": "引用"
+  },
+  {
+    "from": "HR-2024-015",
+    "to": "PROC-005",
+    "relation": "引用"
+  },
+  {
+    "from": "HR-2024-016",
+    "to": "PROC-010",
+    "relation": "引用"
+  },
+  {
+    "from": "HR-2024-017",
+    "to": "PROC-014",
+    "relation": "引用"
+  },
+  {
+    "from": "HR-2024-018",
+    "to": "PROC-011",
+    "relation": "引用"
+  },
+  {
+    "from": "HR-2024-019",
+    "to": "PROC-007",
+    "relation": "引用"
+  },
+  {
+    "from": "HR-2024-020",
+    "to": "PROC-014",
+    "relation": "引用"
+  },
+  {
+    "from": "HR-2024-021",
+    "to": "PROC-007",
+    "relation": "引用"
+  },
+  {
+    "from": "HR-2024-022",
+    "to": "PROC-012",
+    "relation": "引用"
+  },
+  {
+    "from": "HR-2024-023",
+    "to": "PROC-007",
+    "relation": "引用"
+  },
+  {
+    "from": "HR-2024-024",
+    "to": "PROC-008",
+    "relation": "引用"
+  },
+  {
+    "from": "HR-2024-025",
+    "to": "PROC-012",
+    "relation": "引用"
+  },
+  {
+    "from": "HR-2024-003",
+    "to": "HR-2024-018",
+    "relation": "关联"
+  },
+  {
+    "from": "HR-2024-018",
+    "to": "HR-2024-015",
+    "relation": "关联"
+  },
+  {
+    "from": "HR-2024-006",
+    "to": "HR-2024-021",
+    "relation": "关联"
+  },
+  {
+    "from": "HR-2024-014",
+    "to": "HR-2024-025",
+    "relation": "关联"
+  },
+  {
+    "from": "HR-2024-009",
+    "to": "HR-2024-020",
+    "relation": "关联"
+  },
+  {
+    "from": "HR-2024-024",
+    "to": "HR-2024-002",
+    "relation": "关联"
+  },
+  {
+    "from": "HR-2024-017",
+    "to": "HR-2024-016",
+    "relation": "关联"
+  },
+  {
+    "from": "HR-2024-019",
+    "to": "HR-2024-020",
+    "relation": "关联"
+  },
+  {
+    "from": "HR-2024-019",
+    "to": "HR-2024-012",
+    "relation": "关联"
+  },
+  {
+    "from": "HR-2024-017",
+    "to": "HR-2024-013",
+    "relation": "关联"
+  },
+  {
+    "from": "HR-2024-004",
+    "to": "HR-2024-001",
+    "relation": "关联"
+  },
+  {
+    "from": "HR-2024-022",
+    "to": "HR-2024-011",
+    "relation": "关联"
+  },
+  {
+    "from": "HR-2024-025",
+    "to": "HR-2024-001",
+    "relation": "关联"
+  },
+  {
+    "from": "HR-2024-011",
+    "to": "HR-2024-003",
+    "relation": "关联"
+  },
+  {
+    "from": "HR-2024-016",
+    "to": "HR-2024-008",
+    "relation": "关联"
+  },
+  {
+    "from": "HR-2024-009",
+    "to": "HR-2024-011",
+    "relation": "关联"
+  },
+  {
+    "from": "HR-2024-007",
+    "to": "HR-2024-016",
+    "relation": "关联"
+  },
+  {
+    "from": "HR-2024-001",
+    "to": "HR-2024-014",
+    "relation": "关联"
+  },
+  {
+    "from": "HR-2024-002",
+    "to": "HR-2024-021",
+    "relation": "关联"
+  },
+  {
+    "from": "HR-2024-003",
+    "to": "HR-2024-015",
+    "relation": "关联"
+  },
+  {
+    "from": "HR-2024-010",
+    "to": "HR-2024-023",
+    "relation": "关联"
+  },
+  {
+    "from": "HR-2024-005",
+    "to": "HR-2024-010",
+    "relation": "关联"
+  },
+  {
+    "from": "HR-2024-018",
+    "to": "HR-2024-014",
+    "relation": "关联"
+  },
+  {
+    "from": "HR-2024-018",
+    "to": "HR-2024-017",
+    "relation": "关联"
+  },
+  {
+    "from": "HR-2024-012",
+    "to": "HR-2024-019",
+    "relation": "关联"
+  },
+  {
+    "from": "HR-2024-012",
+    "to": "HR-2024-015",
+    "relation": "关联"
+  },
+  {
+    "from": "HR-2024-005",
+    "to": "HR-2024-007",
+    "relation": "关联"
+  },
+  {
+    "from": "HR-2024-005",
+    "to": "HR-2024-013",
+    "relation": "关联"
+  },
+  {
+    "from": "HR-2024-018",
+    "to": "HR-2024-025",
+    "relation": "关联"
+  },
+  {
+    "from": "HR-2024-013",
+    "to": "HR-2024-020",
+    "relation": "关联"
+  },
+  {
+    "from": "HR-2024-018",
+    "to": "HR-2024-002",
+    "relation": "关联"
+  },
+  {
+    "from": "HR-2024-017",
+    "to": "HR-2024-004",
+    "relation": "关联"
+  },
+  {
+    "from": "HR-2024-022",
+    "to": "HR-2024-023",
+    "relation": "关联"
+  },
+  {
+    "from": "HR-2024-025",
+    "to": "HR-2024-021",
+    "relation": "关联"
+  },
+  {
+    "from": "HR-2024-002",
+    "to": "HR-2024-003",
+    "relation": "关联"
+  },
+  {
+    "from": "HR-2024-006",
+    "to": "HR-2024-015",
+    "relation": "关联"
+  },
+  {
+    "from": "HR-2024-018",
+    "to": "HR-2024-019",
+    "relation": "关联"
+  },
+  {
+    "from": "HR-2024-013",
+    "to": "HR-2024-025",
+    "relation": "关联"
+  },
+  {
+    "from": "HR-2024-005",
+    "to": "HR-2024-024",
+    "relation": "关联"
+  },
+  {
+    "from": "PROC-001",
+    "to": "FORM-014",
+    "relation": "使用"
+  },
+  {
+    "from": "PROC-002",
+    "to": "FORM-005",
+    "relation": "使用"
+  },
+  {
+    "from": "PROC-003",
+    "to": "FORM-013",
+    "relation": "使用"
+  },
+  {
+    "from": "PROC-004",
+    "to": "FORM-014",
+    "relation": "使用"
+  },
+  {
+    "from": "PROC-005",
+    "to": "FORM-011",
+    "relation": "使用"
+  },
+  {
+    "from": "PROC-006",
+    "to": "FORM-008",
+    "relation": "使用"
+  },
+  {
+    "from": "PROC-007",
+    "to": "FORM-005",
+    "relation": "使用"
+  },
+  {
+    "from": "PROC-008",
+    "to": "FORM-005",
+    "relation": "使用"
+  },
+  {
+    "from": "PROC-009",
+    "to": "FORM-014",
+    "relation": "使用"
+  },
+  {
+    "from": "PROC-010",
+    "to": "FORM-007",
+    "relation": "使用"
+  },
+  {
+    "from": "PROC-011",
+    "to": "FORM-005",
+    "relation": "使用"
+  },
+  {
+    "from": "PROC-012",
+    "to": "FORM-013",
+    "relation": "使用"
+  },
+  {
+    "from": "PROC-013",
+    "to": "FORM-005",
+    "relation": "使用"
+  },
+  {
+    "from": "PROC-014",
+    "to": "FORM-005",
+    "relation": "使用"
+  },
+  {
+    "from": "PROC-015",
+    "to": "FORM-005",
+    "relation": "使用"
+  },
+  {
+    "from": "PROC-016",
+    "to": "FORM-005",
+    "relation": "使用"
+  },
+  {
+    "from": "PROC-017",
+    "to": "FORM-003",
+    "relation": "使用"
+  },
+  {
+    "from": "PROC-018",
+    "to": "FORM-005",
+    "relation": "使用"
+  },
+  {
+    "from": "PROC-019",
+    "to": "FORM-012",
+    "relation": "使用"
+  },
+  {
+    "from": "PROC-020",
+    "to": "FORM-002",
+    "relation": "使用"
+  },
+  {
+    "from": "EMP035",
+    "to": "DEV-012",
+    "relation": "领用"
+  },
+  {
+    "from": "EMP018",
+    "to": "DEV-013",
+    "relation": "领用"
+  },
+  {
+    "from": "EMP001",
+    "to": "DEV-001",
+    "relation": "领用"
+  },
+  {
+    "from": "EMP007",
+    "to": "DEV-004",
+    "relation": "领用"
+  },
+  {
+    "from": "EMP006",
+    "to": "DEV-001",
+    "relation": "领用"
+  },
+  {
+    "from": "EMP018",
+    "to": "DEV-009",
+    "relation": "领用"
+  },
+  {
+    "from": "EMP047",
+    "to": "DEV-006",
+    "relation": "领用"
+  },
+  {
+    "from": "EMP036",
+    "to": "DEV-004",
+    "relation": "领用"
+  },
+  {
+    "from": "EMP030",
+    "to": "DEV-020",
+    "relation": "领用"
+  },
+  {
+    "from": "EMP028",
+    "to": "DEV-010",
+    "relation": "领用"
+  },
+  {
+    "from": "EMP034",
+    "to": "DEV-004",
+    "relation": "领用"
+  },
+  {
+    "from": "EMP036",
+    "to": "DEV-002",
+    "relation": "领用"
+  },
+  {
+    "from": "EMP014",
+    "to": "DEV-009",
+    "relation": "领用"
+  },
+  {
+    "from": "EMP035",
+    "to": "DEV-002",
+    "relation": "领用"
+  },
+  {
+    "from": "EMP024",
+    "to": "DEV-013",
+    "relation": "领用"
+  },
+  {
+    "from": "EMP034",
+    "to": "DEV-012",
+    "relation": "领用"
+  },
+  {
+    "from": "EMP042",
+    "to": "DEV-009",
+    "relation": "领用"
+  },
+  {
+    "from": "EMP010",
+    "to": "DEV-002",
+    "relation": "领用"
+  },
+  {
+    "from": "EMP037",
+    "to": "DEV-006",
+    "relation": "领用"
+  },
+  {
+    "from": "EMP038",
+    "to": "DEV-003",
+    "relation": "领用"
+  },
+  {
+    "from": "EMP036",
+    "to": "DEV-003",
+    "relation": "领用"
+  },
+  {
+    "from": "EMP014",
+    "to": "DEV-002",
+    "relation": "领用"
+  },
+  {
+    "from": "EMP026",
+    "to": "DEV-016",
+    "relation": "领用"
+  },
+  {
+    "from": "EMP006",
+    "to": "DEV-007",
+    "relation": "领用"
+  },
+  {
+    "from": "EMP028",
+    "to": "DEV-019",
+    "relation": "领用"
+  },
+  {
+    "from": "EMP019",
+    "to": "DEV-005",
+    "relation": "领用"
+  },
+  {
+    "from": "EMP040",
+    "to": "DEV-012",
+    "relation": "领用"
+  },
+  {
+    "from": "EMP012",
+    "to": "DEV-003",
+    "relation": "领用"
+  },
+  {
+    "from": "EMP022",
+    "to": "DEV-006",
+    "relation": "领用"
+  },
+  {
+    "from": "EMP031",
+    "to": "DEV-001",
+    "relation": "领用"
+  },
+  {
+    "from": "前端组",
+    "to": "西安办公室",
+    "relation": "位于"
+  },
+  {
+    "from": "后端组",
+    "to": "南京办公室",
+    "relation": "位于"
+  },
+  {
+    "from": "测试组",
+    "to": "苏州办公室",
+    "relation": "位于"
+  },
+  {
+    "from": "AI组",
+    "to": "广州办公室",
+    "relation": "位于"
+  },
+  {
+    "from": "销售一组",
+    "to": "广州办公室",
+    "relation": "位于"
+  },
+  {
+    "from": "销售二组",
+    "to": "北京总部",
+    "relation": "位于"
+  },
+  {
+    "from": "大客户部",
+    "to": "上海分部",
+    "relation": "位于"
+  },
+  {
+    "from": "品牌组",
+    "to": "北京总部",
+    "relation": "位于"
+  },
+  {
+    "from": "公关组",
+    "to": "深圳分部",
+    "relation": "位于"
+  },
+  {
+    "from": "招聘组",
+    "to": "西安办公室",
+    "relation": "位于"
+  },
+  {
+    "from": "薪酬组",
+    "to": "成都办公室",
+    "relation": "位于"
+  },
+  {
+    "from": "核算组",
+    "to": "成都办公室",
+    "relation": "位于"
+  },
+  {
+    "from": "审计组",
+    "to": "杭州办公室",
+    "relation": "位于"
+  },
+  {
+    "from": "内容组",
+    "to": "杭州办公室",
+    "relation": "位于"
+  },
+  {
+    "from": "产品设计组",
+    "to": "南京办公室",
+    "relation": "位于"
+  }
+]

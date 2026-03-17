@@ -38,7 +38,7 @@ class RefreshTokenRequest(BaseModel):
 # Pre-hashed password for demo user (hash of "demo123")
 USERS = {
     "demo": {
-        "password_hash": "$2b$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewY5GyYzvYf5F/mq",  # demo123
+        "password_hash": "$2b$12$tqB38Hll9hl2hk4Y5gGObOcEFCDIBLdMT6fqD6QOUhOo4ao2KzK4q",  # demo123
         "user_id": str(uuid.uuid4()),
         "role": "admin"
     }

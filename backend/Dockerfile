@@ -20,7 +20,7 @@ RUN pip install -i https://pypi.tuna.tsinghua.edu.cn/simple --timeout 60 --no-ca
 COPY backend/app ./app
 
 # Copy configuration
-COPY backend/.env.example .env
+COPY backend/.env .env
 
 # Expose port
 EXPOSE 8000
@@ -30,4 +30,4 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
     CMD python -c "import requests; requests.get('http://localhost:8000/health')"
 
 # Run application
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
