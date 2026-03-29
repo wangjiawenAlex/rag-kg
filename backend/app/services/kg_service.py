@@ -37,6 +37,13 @@ class KGService:
         self.user = user
         self.password = password
         self.driver = None
+        # 预加载实体库（用于规则匹配NER）
+        self._entity_cache = {
+            "departments": [],
+            "employees": [],
+            "positions": []
+        }
+        self._cache_loaded = False
 
     async def connect(self) -> None:
         """Create Neo4j connection if needed."""
@@ -109,17 +116,119 @@ class KGService:
 
     async def search(self, query: str, top_k: int = 5, max_hops: int = 2) -> List[KGPath]:
         """Search knowledge graph for paths around extracted entities."""
+        # 检测是否包含月薪相关查询
+        salary_keywords = ['月薪', '工资', '薪资', '收入', ' salary', ' salary']
+        has_salary_query = any(kw in query for kw in salary_keywords)
+        
+        # 如果是月薪查询，使用专门的逻辑
+        if has_salary_query:
+            return await self._search_salary(query, top_k)
+        
+        # 检测统计查询（"有多少人"、"多少人"、"几个部门"）
+        count_keywords = ['有多少人', '多少人', '几口', '多少员工', '几个部门', '多少部门', '多少个部门', '有哪些部门', '部门有哪些']
+        is_count_query = any(kw in query for kw in count_keywords)
+        
+        if is_count_query:
+            return await self._search_count(query, top_k)
+        
+        # 原有逻辑
         entities = await self.extract_entities(query)
         if not entities:
             return []
 
+        # 对每个实体分别查询再合并（解决IN查询的问题）
+        all_paths = []
+        for entity in entities[:4]:  # 最多查4个实体
+            cypher = """
+            MATCH (start:Entity {name: $entity})
+            MATCH p=(start)-[r*1..""" + str(max_hops) + """]-(end:Entity)
+            RETURN p
+            LIMIT """ + str(max(top_k, 8)) + """
+            """
+            try:
+                rows = await self._run(cypher, {"entity": entity})
+                for row in rows:
+                    path_obj = row.get("p")
+                    triples = self._triples_from_path(path_obj)
+                    if triples:
+                        confidence = sum(t.confidence for t in triples) / len(triples)
+                        all_paths.append(KGPath(
+                            path_id=f"path-{len(all_paths)}",
+                            triples=triples,
+                            confidence=confidence
+                        ))
+            except:
+                pass
+        
+        return all_paths[:top_k]
+    
+    async def _search_count(self, query: str, top_k: int) -> List[KGPath]:
+        """Search count information (e.g., how many people in a department)."""
+        # 预加载实体库
+        await self._ensure_entity_cache()
+        
+        # 检测是否是"几个部门"类查询
+        dept_count_keywords = ['几个部门', '多少部门', '多少个部门', '有哪些部门', '部门有哪些']
+        is_dept_list_query = any(kw in query for kw in dept_count_keywords)
+        
+        if is_dept_list_query:
+            # 查询所有部门
+            dept_count = len(self._entity_cache["departments"])
+            dept_names = ", ".join(self._entity_cache["departments"])
+            triple = Triple(
+                subject="公司",
+                predicate="部门列表",
+                obj=dept_names,
+                confidence=1.0
+            )
+            return [KGPath(
+                path_id="dept-list-0",
+                triples=[triple],
+                confidence=1.0
+            )]
+        
+        # 找部门
+        department = None
+        for dept in self._entity_cache["departments"]:
+            if dept in query:
+                department = dept
+                break
+        
+        if not department:
+            # 尝试用部门简称匹配
+            for dept in self._entity_cache["departments"]:
+                dept_short = dept.replace("部", "")
+                if dept_short in query:
+                    department = dept
+                    break
+        
+        if not department:
+            return []
+        
+        # 查询部门人数
         cypher = """
-        MATCH (start:Entity)
-        WHERE any(name in $entities WHERE toLower(start.name) CONTAINS toLower(name))
-        MATCH p=(start)-[r*1..""" + str(max_hops) + """]-(end:Entity)
-        RETURN p
-        LIMIT """ + str(top_k) + """
+        MATCH (d:Department {name: $dept})-[r:BELONGS_TO]-(e:Employee)
+        RETURN count(e) as count
         """
+        try:
+            rows = await self._run(cypher, {"dept": department})
+            for row in rows:
+                count = row.get("count", 0)
+                triple = Triple(
+                    subject=department,
+                    predicate="部门总人数",
+                    obj=str(count),
+                    confidence=1.0
+                )
+                return [KGPath(
+                    path_id="count-0",
+                    triples=[triple],
+                    confidence=1.0
+                )]
+        except:
+            pass
+        
+        return []
         rows = await self._run(cypher, {"entities": entities})
 
         paths: List[KGPath] = []
@@ -131,14 +240,160 @@ class KGService:
             confidence = sum(t.confidence for t in triples) / len(triples)
             paths.append(KGPath(path_id=f"path-{idx:03d}", triples=triples, confidence=confidence, provenance=None))
         return paths
+    
+    async def _search_salary(self, query: str, top_k: int) -> List[KGPath]:
+        """Search salary information from knowledge graph."""
+        entities = await self.extract_entities(query)
+        
+        # 确定是查部门还是查员工
+        department = None
+        employee = None
+        
+        # 尝试找部门
+        for ent in entities:
+            if ent in ['技术部', '产品部', '财务部', '人事部', '市场部', '销售部', '运营部']:
+                department = ent
+                break
+        
+        # 尝试找员工
+        if not department:
+            for ent in entities:
+                if '员工' in ent:
+                    employee = ent
+        
+        paths = []
+        
+        # 查询特定部门的工资最高员工
+        if department:
+            cypher = f"""
+            MATCH (d:Department {{name: $dept}})<-[:BELONGS_TO]-(e:Employee)-[:HAS_SALARY]->(s:Salary)
+            RETURN e.name as name, s.amount as salary
+            ORDER BY s.amount DESC
+            LIMIT {top_k}
+            """
+            rows = await self._run(cypher, {"dept": department})
+            
+            for idx, row in enumerate(rows):
+                name = row.get("name", "未知")
+                salary = row.get("salary", 0)
+                # 构建三元组
+                triples = [
+                    Triple(
+                        subject=f"{department}",
+                        predicate="部门员工",
+                        obj=name,
+                        confidence=0.9
+                    ),
+                    Triple(
+                        subject=name,
+                        predicate="月薪",
+                        obj=f"{salary}元",
+                        confidence=0.9
+                    )
+                ]
+                paths.append(KGPath(
+                    path_id=f"salary-{idx:03d}",
+                    triples=triples,
+                    confidence=0.9,
+                    provenance=None
+                ))
+        
+        # 查询特定员工的工资
+        elif employee:
+            cypher = """
+            MATCH (e:Employee {name: $emp})-[:HAS_SALARY]->(s:Salary)
+            RETURN e.name as name, s.amount as salary
+            """
+            rows = await self._run(cypher, {"emp": employee})
+            
+            for idx, row in enumerate(rows):
+                name = row.get("name", "未知")
+                salary = row.get("salary", 0)
+                triples = [
+                    Triple(
+                        subject=name,
+                        predicate="月薪",
+                        obj=f"{salary}元",
+                        confidence=0.9
+                    )
+                ]
+                paths.append(KGPath(
+                    path_id=f"salary-{idx:03d}",
+                    triples=triples,
+                    confidence=0.9,
+                    provenance=None
+                ))
+        
+        return paths
+
+    async def _ensure_entity_cache(self) -> None:
+        """预加载实体库到内存（只执行一次）"""
+        if self._cache_loaded:
+            return
+        try:
+            # 加载部门
+            rows = await self._run("MATCH (d:Department) RETURN d.name as name", {})
+            self._entity_cache["departments"] = [row["name"] for row in rows]
+            # 加载员工
+            rows = await self._run("MATCH (e:Employee) RETURN e.name as name", {})
+            self._entity_cache["employees"] = [row["name"] for row in rows if row.get("name")]
+            # 加载职位
+            rows = await self._run("MATCH (e:Employee) RETURN DISTINCT e.position as pos", {})
+            self._entity_cache["positions"] = [row["pos"] for row in rows if row.get("pos")]
+            self._cache_loaded = True
+        except Exception as e:
+            pass
 
     async def extract_entities(self, text: str) -> List[str]:
-        """Extract entities from text."""
+        """Extract entities from text using rule-based NER."""
+        # 使用NER模型（如果可用）
         if hasattr(self.ner_model, "extract"):
             return self.ner_model.extract(text)
 
-        terms = [w.strip(".,!?()[]{}") for w in text.split()]
-        entities = [t for t in terms if len(t) > 3]
+        # 预加载实体库
+        await self._ensure_entity_cache()
+        
+        entities = []
+        
+        # 1. 精确匹配部门
+        for dept in self._entity_cache["departments"]:
+            if dept in text:
+                entities.append(dept)
+        
+        # 2. 精确匹配员工姓名
+        for emp in self._entity_cache["employees"]:
+            if emp in text:
+                entities.append(emp)
+        
+        # 3. 规则匹配中文实体
+        import re
+        # 匹配 "XX部"、"XX部门"
+        dept_patterns = [
+            r'([\u4e00-\u9fa5]{2,5})(?:部|部门|科室|组)',
+        ]
+        for pattern in dept_patterns:
+            matches = re.findall(pattern, text)
+            entities.extend(matches)
+        
+        # 4. 匹配"有哪些部门"、"部门有哪些"等问题
+        if any(kw in text for kw in ["哪些部门", "有什么部门", "部门有哪些"]):
+            # 直接返回所有部门
+            entities.extend(self._entity_cache["departments"])
+        
+        # 5. 匹配"负责人"、"主管"等问题
+        if any(kw in text for kw in ["负责人", "主管", "老板", "管理"]):
+            # 提取可能的部门名称
+            for dept in self._entity_cache["departments"]:
+                dept_short = dept.replace("部", "").replace("部门", "")
+                if dept_short in text:
+                    if dept not in entities:
+                        entities.append(dept)
+        
+        # 过滤无意义的实体
+        stop_words = ["公司有哪些", "公司有哪", "有哪些", "什么部"]
+        entities = [e for e in entities if e not in stop_words and len(e) >= 2]
+        
+        # 去重并返回
         return list(dict.fromkeys(entities))[:8]
 
     async def find_path(self, entity_from: str, entity_to: Optional[str] = None, max_hops: int = 2) -> List[KGPath]:

@@ -138,10 +138,18 @@ class RouterService:
             QueryFeatures object
         """
         # Simple feature extraction
-        has_entity = any(word.isupper() for word in query.split())
+        # 检测英文大写词或中文实体特征
+        has_entity = any(word.isupper() for word in query.split()) or any(
+            kw in query for kw in ['部', '员工', '经理', '公司', '部门', '组']
+        )
         query_length = len(query.split())
-        question_words = ['what', 'how', 'why', 'when', 'where', 'which', 'who']
-        contains_question_word = any(qw in query.lower() for qw in question_words)
+        
+        # 中英文疑问词检测
+        question_words = ['what', 'how', 'why', 'when', 'where', 'which', 'who', 'whom']
+        chinese_question_words = ['什么', '怎么', '如何', '为什么', '谁', '哪个', '哪些', '多少', '幾']
+        contains_question_word = any(qw in query.lower() for qw in question_words) or any(
+            qw in query for qw in chinese_question_words
+        )
         
         return QueryFeatures(
             has_entity=has_entity,

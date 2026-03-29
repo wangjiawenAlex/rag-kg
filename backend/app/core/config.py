@@ -29,8 +29,8 @@ class Settings(BaseSettings):
     # Vector DB
     vector_db_type: str = "milvus"  # milvus, chroma, faiss, weaviate
     vector_db_url: str = "http://localhost:19530"
-    embedding_model: str = "sentence-transformers/all-MiniLM-L6-v2"
-    embedding_dim: int = 384
+    embedding_model: str = "BAAI/bge-base-zh-v1.5"  # 中文优化
+    embedding_dim: int = 768  # bge-base-zh-v1.5 是768维
     
     # Security
     secret_key: str = "dev-secret-key-change-in-production"

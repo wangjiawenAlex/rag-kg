@@ -91,5 +91,5 @@ def decode_token(
         return payload
     except jwt.ExpiredSignatureError:
         return None
-    except jwt.InvalidTokenError:
+    except jwt.JWTError:
         return None

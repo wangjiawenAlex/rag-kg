@@ -22,7 +22,7 @@ def get_api_endpoint() -> str:
     # Try to get from environment, then secrets, then default
     if "api_endpoint" in st.secrets:
         return st.secrets["api_endpoint"]
-    return os.getenv("API_ENDPOINT", "http://localhost:8000/api/v1")
+    return os.getenv("API_ENDPOINT", "http://localhost:8000")
 
 
 def make_request(

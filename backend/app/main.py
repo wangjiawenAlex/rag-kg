@@ -14,6 +14,30 @@ from app.services.router_service import RouterService
 from app.services.vector_service import VectorService
 
 
+def load_embedding_model(model_name: str, logger=None):
+    """Load sentence transformer embedding model with GPU support."""
+    try:
+        import os
+        os.environ['HF_HUB_OFFLINE'] = '1'
+        os.environ['TRANSFORMERS_OFFLINE'] = '1'
+        
+        from sentence_transformers import SentenceTransformer
+        import torch
+        # 使用 GPU 如果可用
+        device = 'cuda' if torch.cuda.is_available() else 'cpu'
+        if logger:
+            logger.info(f"Loading embedding model on device: {device}")
+        return SentenceTransformer(model_name, device=device)
+    except ImportError:
+        if logger:
+            logger.warning("sentence-transformers not installed, using dummy embeddings")
+        return None
+    except Exception as exc:
+        if logger:
+            logger.warning(f"Failed to load embedding model: {exc}")
+        return None
+
+
 def create_app(settings: Settings = None) -> FastAPI:
     """Create and configure FastAPI application."""
     if settings is None:
@@ -35,13 +59,16 @@ def create_app(settings: Settings = None) -> FastAPI:
         allow_headers=["*"],
     )
 
+    # Load embedding model
+    embedding_model = load_embedding_model(settings.embedding_model, logger)
+    
     vector_service = VectorService(
         db_client={
             "url": settings.vector_db_url,
             "collection_name": "rag_chunks",
             "embedding_dim": settings.embedding_dim,
         },
-        embedding_model=None,
+        embedding_model=embedding_model,
         collection_name="rag_chunks",
         embedding_dim=settings.embedding_dim,
     )

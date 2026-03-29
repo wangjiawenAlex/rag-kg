@@ -11,16 +11,16 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy requirements
-COPY backend/requirements.txt .
+COPY requirements.txt .
 
 # Install Python dependencies
 RUN pip install -i https://pypi.tuna.tsinghua.edu.cn/simple --timeout 60 --no-cache-dir -r requirements.txt
 
 # Copy application code
-COPY backend/app ./app
+COPY app ./app
 
 # Copy configuration
-COPY backend/.env .env
+COPY .env .env
 
 # Expose port
 EXPOSE 8000
