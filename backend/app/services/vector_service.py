@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import asyncio
 import hashlib
+import json
 from dataclasses import dataclass
 from typing import Dict, List, Optional
 from urllib.parse import urlparse
@@ -101,15 +102,23 @@ class VectorService:
         """Search by embedding vector directly."""
         if self.db_client and hasattr(self.db_client, "search") and hasattr(self.db_client, "upsert"):
             rows = await self.db_client.search(embedding, top_k, filters)
-            return [
-                VectorHit(
+            hits = []
+            for item in rows:
+                meta_str = item.get("metadata")
+                if isinstance(meta_str, str):
+                    try:
+                        meta_val = json.loads(meta_str)
+                    except Exception:
+                        meta_val = {}
+                else:
+                    meta_val = meta_str or {}
+                hits.append(VectorHit(
                     id=str(item.get("id", "")),
                     text=item.get("text", ""),
                     score=float(item.get("score", 0.0)),
-                    metadata=item.get("metadata", {}) or {},
-                )
-                for item in rows
-            ]
+                    metadata=meta_val,
+                ))
+            return hits
 
         await self._ensure_ready()
 
@@ -145,8 +154,15 @@ class VectorService:
                 pass
             meta_val = {}
             try:
-                meta_val = entity.get("metadata") or {}
-            except:
+                raw_meta = entity.get("metadata")
+                if isinstance(raw_meta, str):
+                    try:
+                        meta_val = json.loads(raw_meta)
+                    except Exception:
+                        meta_val = {}
+                else:
+                    meta_val = raw_meta or {}
+            except Exception:
                 pass
             hits.append(
                 VectorHit(

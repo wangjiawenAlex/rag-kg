@@ -335,10 +335,10 @@ class KGService:
             rows = await self._run("MATCH (d:Department) RETURN d.name as name", {})
             self._entity_cache["departments"] = [row["name"] for row in rows]
             # 加载员工
-            rows = await self._run("MATCH (e:Employee) RETURN e.name as name", {})
+            rows = await self._run("MATCH (e:Entity) RETURN e.name as name", {})
             self._entity_cache["employees"] = [row["name"] for row in rows if row.get("name")]
             # 加载职位
-            rows = await self._run("MATCH (e:Employee) RETURN DISTINCT e.position as pos", {})
+            rows = await self._run("MATCH (e:Entity) RETURN DISTINCT e.position as pos", {})
             self._entity_cache["positions"] = [row["pos"] for row in rows if row.get("pos")]
             self._cache_loaded = True
         except Exception as e:
