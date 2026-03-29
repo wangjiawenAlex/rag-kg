@@ -360,10 +360,14 @@ class KGService:
             if dept in text:
                 entities.append(dept)
         
-        # 2. 精确匹配员工姓名
+        # 2. 精确匹配员工姓名（匹配所有，然后按长度降序，优先保留最长匹配）
+        matched_employees = []
         for emp in self._entity_cache["employees"]:
             if emp in text:
-                entities.append(emp)
+                matched_employees.append(emp)
+        # 按长度降序排列，避免"员工1"排在"员工18"前面
+        matched_employees.sort(key=len, reverse=True)
+        entities.extend(matched_employees)
         
         # 3. 规则匹配中文实体
         import re
