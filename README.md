@@ -87,7 +87,7 @@ y:\wjw\
 ### Backend
 - **Framework**: FastAPI (Python)
 - **Async**: AsyncIO, asyncpg
-- **Databases**: PostgreSQL, Neo4j (Knowledge Graph), Milvus/Chroma (Vector DB)
+- **Databases**: SQLite（关系数据）, Neo4j（知识图谱）, ChromaDB（向量检索）
 - **NLP**: sentence-transformers, spaCy (NER)
 - **Authentication**: JWT, bcrypt
 - **Testing**: pytest, pytest-asyncio
@@ -101,7 +101,7 @@ y:\wjw\
 
 ### 后端
 - **框架**: FastAPI 0.104.1 (异步Python)
-- **数据库**: PostgreSQL 15 (关系)、Neo4j 5 (知识图谱)、Milvus/Chroma (向量)
+- **数据库**: SQLite (关系)、Neo4j 5 (知识图谱)、ChromaDB (向量)
 - **NLP**: sentence-transformers、spaCy (NER)
 - **认证**: JWT (PyJWT)、bcrypt
 - **异步**: 全内置 AsyncIO 支持
@@ -119,22 +119,18 @@ y:\wjw\
 
 ## 🚀 快速开始
 
-### 方式1: 使用Docker Compose (推荐)
+### 方式1: 超薄本轻量模式（推荐）
 
 ```bash
 # 1. 进入项目目录
 cd y:\wjw
 
-# 2. 启动所有服务
-docker-compose up --build
-
-# 3. 访问系统
-# 前端: http://localhost:8501
-# API: http://localhost:8000
-# API文档: http://localhost:8000/docs
+# 2. 先在电脑上启动本机 Neo4j 服务（非 Docker）
+# Neo4j Browser: http://localhost:7474
+# Bolt: bolt://localhost:7687
 ```
 
-### 方式2: 本地开发（无Docker）
+### 方式2: 手动运行前后端（本地）
 
 #### 后端设置
 
@@ -149,9 +145,9 @@ venv\Scripts\activate
 # 3. 安装依赖
 pip install -r requirements.txt
 
-# 4. 创建 .env 文件
-copy .env.example .env
-# 编辑 .env 文件中的数据库连接信息
+# 4. 创建 .env 文件（可选）
+cp .env.example .env 2>/dev/null || true
+# 默认已是 SQLite + Chroma + 本机 Neo4j，无需额外改动
 
 # 5. 启动后端 (在项目根目录)
 cd ..
