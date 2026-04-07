@@ -1,52 +1,5 @@
 version: '3.8'
 
-services:
-  postgres:
-    image: postgres:15-alpine
-    container_name: rag_postgres
-    environment:
-      POSTGRES_DB: ragdb
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: example
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
-  backend:
-    build:
-      context: ..
-      dockerfile: backend/Dockerfile
-    container_name: rag_backend
-    environment:
-      DATABASE_URL: "postgresql+asyncpg://postgres:example@postgres:5432/ragdb"
-      DEBUG: "false"
-    ports:
-      - "8000:8000"
-    depends_on:
-      postgres:
-        condition: service_healthy
-    volumes:
-      - ../backend:/app
-
-  frontend:
-    build:
-      context: ..
-      dockerfile: frontend/Dockerfile
-    container_name: rag_frontend
-    environment:
-      API_ENDPOINT: "http://backend:8000/api/v1"
-    ports:
-      - "8501:8501"
-    depends_on:
-      - backend
-    volumes:
-      - ../frontend:/app
-
-volumes:
-  postgres_data:
+# Lightweight mode now expects Neo4j to be installed and started on host machine.
+# Keep this file as a placeholder to avoid accidental docker startup for database services.
+services: {}

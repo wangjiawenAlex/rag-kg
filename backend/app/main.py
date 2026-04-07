@@ -64,6 +64,7 @@ def create_app(settings: Settings = None) -> FastAPI:
     
     vector_service = VectorService(
         db_client={
+            "db_type": settings.vector_db_type,
             "url": settings.vector_db_url,
             "collection_name": "rag_chunks",
             "embedding_dim": settings.embedding_dim,
@@ -98,9 +99,9 @@ def create_app(settings: Settings = None) -> FastAPI:
     async def startup_event():
         try:
             await vector_service._ensure_ready()
-            logger.info("Milvus initialized")
+            logger.info("%s vector store initialized", settings.vector_db_type)
         except Exception as exc:
-            logger.warning("Milvus init failed: %s", exc)
+            logger.warning("%s vector store init failed: %s", settings.vector_db_type, exc)
 
         try:
             await kg_service.connect()

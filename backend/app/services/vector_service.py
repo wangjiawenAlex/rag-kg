@@ -31,28 +31,49 @@ class VectorService:
         self.embedding_dim = embedding_dim
 
         self._collection = None
+        self._db_type = "milvus"
         self._milvus_host = "localhost"
         self._milvus_port = "19530"
         self._milvus_alias = "default"
+        self._chroma_path = "./data/chroma"
+        self._chroma_client = None
 
         if isinstance(db_client, dict):
+            self._db_type = str(db_client.get("db_type", self._db_type)).lower()
             self.collection_name = db_client.get("collection_name", self.collection_name)
             self.embedding_dim = int(db_client.get("embedding_dim", self.embedding_dim))
             url = db_client.get("url")
             if url:
-                parsed = urlparse(url)
-                self._milvus_host = parsed.hostname or self._milvus_host
-                self._milvus_port = str(parsed.port or self._milvus_port)
+                if self._db_type == "chroma":
+                    self._chroma_path = url
+                else:
+                    parsed = urlparse(url)
+                    self._milvus_host = parsed.hostname or self._milvus_host
+                    self._milvus_port = str(parsed.port or self._milvus_port)
             self._milvus_host = db_client.get("host", self._milvus_host)
             self._milvus_port = str(db_client.get("port", self._milvus_port))
+            self._chroma_path = db_client.get("path", self._chroma_path)
 
     async def _ensure_ready(self) -> None:
-        """Ensure Milvus connection and collection are ready."""
+        """Ensure vector store connection and collection are ready."""
         if self._collection is not None:
             return
 
         if self.db_client and hasattr(self.db_client, "search") and hasattr(self.db_client, "upsert"):
             # External adapter already provided.
+            return
+
+        if self._db_type == "chroma":
+            import chromadb
+
+            def _connect_chroma():
+                self._chroma_client = chromadb.PersistentClient(path=self._chroma_path)
+                return self._chroma_client.get_or_create_collection(
+                    name=self.collection_name,
+                    metadata={"hnsw:space": "cosine"},
+                )
+
+            self._collection = await asyncio.to_thread(_connect_chroma)
             return
 
         from pymilvus import (
@@ -127,6 +148,13 @@ class VectorService:
             expr = f'metadata["doc_id"] == "{filters["doc_id"]}"'
 
         def _search():
+            if self._db_type == "chroma":
+                chroma_result = self._collection.query(
+                    query_embeddings=[embedding],
+                    n_results=top_k,
+                    include=["documents", "metadatas", "distances"],
+                )
+                return chroma_result
             result = self._collection.search(
                 data=[embedding],
                 anns_field="embedding",
@@ -140,6 +168,23 @@ class VectorService:
         result = await asyncio.to_thread(_search)
 
         hits: List[VectorHit] = []
+        if self._db_type == "chroma":
+            ids = result.get("ids", [[]])[0]
+            docs = result.get("documents", [[]])[0]
+            metas = result.get("metadatas", [[]])[0]
+            distances = result.get("distances", [[]])[0]
+            for doc_id, text_val, meta_val, dist in zip(ids, docs, metas, distances):
+                score = max(0.0, 1.0 - float(dist))
+                hits.append(
+                    VectorHit(
+                        id=str(doc_id),
+                        text=text_val or "",
+                        score=score,
+                        metadata=meta_val or {},
+                    )
+                )
+            return hits
+
         for item in result[0]:
             entity = item.entity
             text_val = ""
@@ -190,8 +235,16 @@ class VectorService:
         await self._ensure_ready()
 
         def _upsert():
-            self._collection.upsert([ids, texts, metadata, vectors])
-            self._collection.flush()
+            if self._db_type == "chroma":
+                self._collection.upsert(
+                    ids=ids,
+                    embeddings=vectors,
+                    metadatas=metadata,
+                    documents=texts,
+                )
+            else:
+                self._collection.upsert([ids, texts, metadata, vectors])
+                self._collection.flush()
 
         await asyncio.to_thread(_upsert)
         return len(documents)
@@ -208,8 +261,11 @@ class VectorService:
         quoted = ",".join([f'"{doc_id}"' for doc_id in ids])
 
         def _delete():
-            self._collection.delete(expr=f"id in [{quoted}]")
-            self._collection.flush()
+            if self._db_type == "chroma":
+                self._collection.delete(ids=ids)
+            else:
+                self._collection.delete(expr=f"id in [{quoted}]")
+                self._collection.flush()
 
         await asyncio.to_thread(_delete)
         return len(ids)

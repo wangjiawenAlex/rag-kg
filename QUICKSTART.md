@@ -1,23 +1,36 @@
 # RAG Dynamic Router - 快速开始文档
 
-## 🚀 30秒快速开始
+## 🚀 30秒快速开始（超薄本轻量模式）
 
-### 使用 Docker Compose (推荐)
+### 全本机运行（Neo4j / ChromaDB / SQLite）
 
 ```bash
 # 1. 确保 Docker 已安装并运行
 docker --version
 
 # 2. 进入项目目录
-cd y:\wjw
+cd /workspace/rag-kg
 
-# 3. 启动所有服务（只需一条命令）
-docker-compose up --build
+# 3. 确保本机 Neo4j 已启动（非 Docker）
+# Neo4j Browser: http://localhost:7474
+# Bolt: bolt://localhost:7687
 
-# 4. 等待消息 "Application startup complete"，然后访问：
+# 4. 本地手动启动后端（使用 SQLite + ChromaDB + 本机 Neo4j）
+cd backend
+pip install -r requirements.txt
+cd ..
+uvicorn backend.app.main:app --host 0.0.0.0 --port 8000 --reload
+
+# 5. 新终端手动启动前端
+cd frontend
+pip install -r requirements.txt
+streamlit run streamlit_app/app.py
+
+# 6. 访问
+# • Neo4j Browser: http://localhost:7474（本机服务）
 # • 前端: http://localhost:8501
-# • 后端: http://localhost:8000
-# • API文档: http://localhost:8000/docs
+# • 后端 API: http://localhost:8000
+# • API 文档: http://localhost:8000/docs
 
 # 登录凭证：
 # 用户名: demo

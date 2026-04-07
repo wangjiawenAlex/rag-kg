@@ -47,13 +47,13 @@ The RAG Dynamic Router system is a multi-user question-answering platform that i
 
 ### Data Layer
 
-**PostgreSQL**
+**SQLite**
 - User management and authentication
 - Session tracking
 - Query audit logs
 - Document metadata
 
-**Vector Database (Milvus/Chroma)**
+**Vector Database (ChromaDB, local persistent mode)**
 - Document embeddings and chunks
 - Fast similarity search
 - Metadata indexing
@@ -83,6 +83,11 @@ The RAG Dynamic Router system is a multi-user question-answering platform that i
 - All services in containers
 - Suitable for testing and demos
 - Uses embedded or small-scale databases
+
+### Lightweight Local Development (Recommended for laptops)
+- Backend and frontend run directly on host machine
+- Neo4j runs as a native local service (non-Docker)
+- SQLite + ChromaDB use local files for persistence
 
 ### Production (Kubernetes)
 - Scalable microservices architecture
